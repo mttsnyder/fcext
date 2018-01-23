@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+    @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
+    .container {
+        max-height: 600px;
+        min-height: 300px;
+        width: 250px;
+        border: 2px solid rgba(0,0,0,0.3);
+        border-radius: 2px;
+        background: white;
+
+    }
+    body {
+        font-family: "Metallophile Sp8 Light";
+        font-size: 100%;
+    }
+    #status {
+        /* avoid an excessively wide status text */
+        white-space: pre;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 400px;
+    }
+    .patient-list {
+        max-height: 250px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+    th {
+        text-align: center;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    tr {
+        border: 1px solid darkgreen;
+        text-align: center;
+
+    }
+    td {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    tr:nth-child(even) {background-color: #f2f2f2}
+    tr:hover {background-color: #f5f5f5}
+    img {float: right;
+        height: 60px;
+        width: 60px}
+    #taxid {
+        flex:0 0 65%
+    }
+    #selpro
+    {
+        flex:1;
+        margin-left:5%;
+    }
+</style>
+</head>
+<body>
+
+ <div class="container">
+        <div class="page-header">
+          <h2 id="title">Simple Practice Session Week Tallier</h2>
+          <p id="status"></p>
+        </div>
+
+        <div class="tab" style="margin-bottom: 50px;"> <img src="FC.jpg">
+           <table id="tab1" style="border: 1px solid darkgreen">
+               <th>Week &nbsp;&nbsp; </th>
+               <th>Sessions</th>
+               <tbody>
+               <tr><td id="tabd1">1</td><td id="tabwk1"></td></tr>
+               <tr><td id="tabd2">2</td><td id="tabwk2"></td></tr>
+               <tr><td id="tabd3">3</td><td id="tabwk3"></td></tr>
+               <tr><td id="tabd4">4</td><td id="tabwk4"></td></tr>
+               <tr><td id="tabd5">5</td><td id="tabwk5"></td></tr>
+               <tr><td id="tabd6">6</td><td id="tabwk6"></td></tr>
+               </tbody>
+           </table>
+
+        </br>
+
+            <br id="butcon" style="padding:3%">
+                <button id="colbutt" style="font-size:15px;">chachachanges</button></br>
+                <button id="repbutt" style="margin-top:3%;font-size:15px;">Simp Prac Report</button></br>
+                <button id="wavebutt" style="margin-top:3%;font-size:15px;">Wave Report</button></br>
+                <div id="yoy">
+                    <button id="taxid" style="margin-top:3%;font-size:15px;">taxid</button>
+                <select id="selpro">
+                        <option value="46-2095373">SLY</option>
+                        <option value="46-0527138">Snyder</option>
+                        <option value="mercedes">Katie</option>
+                        <option value="audi">Audi</option>
+                </select>
+                </div></div>
+ </div></div>
+
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="extension.js" type="text/javascript"></script>
+    <script src="davidbowie.js" type="text/javascript"></script>
+
+</body>
+</html>
+

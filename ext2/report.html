@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FC Ins Report</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" **media="screen"** type="text/css">
+
+    <style>
+        @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
+        .container {
+            /*max-height: 600px;
+            min-height: 300px;
+            width: 250px;*/
+            /*border: 2px solid rgba(0,0,0,0.3);
+            border-radius: 2px;*/
+            background: white;
+
+        }
+        body {
+            font-family: "Metallophile Sp8 Light";
+            font-size: 100%;
+        }
+        th {
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        tr {
+            border-top: 1px solid darkgreen;
+            border-bottom: 1px solid darkgreen;
+            text-align: center;
+
+        }
+        td {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        tr:nth-child(even) {background-color: #f2f2f2}
+        tr:hover {background-color: #f5f5f5}
+        .tab{
+            display:flex;
+            margin-left:2.5%;
+            width:95%;
+        }
+        img {/*float: right;*/
+            height: 60px;
+            width: 60px;
+        float:right}
+
+        #tablethingy{
+            flex:0 0 65%
+        }
+        .first {
+            float: left;
+            padding:1%;
+            font-size:20px;
+            width:30%;
+            margin-left:2%
+        }
+        .second {
+            float: left;
+            padding: 1%;
+            font-size:20px;
+            width:30%;
+            margin-left:2%
+        }
+        #cont {
+            padding: 1%;
+            width:95%;
+            margin-left:2.5%;
+        }
+        #sums {
+           /* float:left;
+            margin-right:30px;*/
+           /* border-top: solid;
+            border-top-color: darkslategrey;
+            border-top-width: 1px;*/
+        }
+        @media print {
+            button {
+                display:none;
+            }
+        }
+        #sign, #clsums, #sums {
+           /* border-top: solid;
+            border-top-color: darkslategrey;
+            border-top-width: 1px;*/
+            /*width: 250px;
+            margin-left: 300px;
+            margin-top: 30px;
+            padding-left: 30px;
+            padding-top: 30px;
+            padding-bottom: 30px;*/
+        }
+        #cont {
+            margin-top: 1%;
+            border-top: 1px solid lightgrey;
+            margin-left: 0%;
+        }
+        #repcon {display: inline-block;
+        font-size:20px}
+        #notesdiv {
+            margin-left: 4.5%;
+            width: 87%;
+            font-size: 16px;
+            padding: 1%;
+            border: solid 0.5px;
+
+        }
+
+    </style>
+</head>
+<body>
+<div id="printthis" class="container">
+    <div class="page-header">
+        <h2>Full Circle Insurance Report Thingy</h2>
+        <h4 id="date"></h4>
+        <h4 id="name"></h4>
+        <img src="FC.jpg">
+    </div>
+
+    <div class="tab">
+        <table id="tablethingy"></table>
+    </div>
+
+
+    <div id="cont">
+        <div id="sums" class="first"></div>
+        <div id="clsums" class="second"></div>
+        <div id="sign" class="second"></div>
+    </div>
+<div id="repcon"></div>
+</div>
+<div id="notesdiv" contenteditable="true">Notes:</div>
+
+        </br>
+        <button id="twopac" style="margin-left:10%; font-size:15px;">bring it</button>
+        <button id="threepac" style="margin-left:10%; font-size:15px;">fee or no</button>
+        <button id="fourpac" style="margin-left:10%; font-size:15px;">status or no</button>
+        <button id="fivepac" style="margin-left:10%; font-size:15px;">abbv names</button>
+        <button id="sixpac" style="margin-left:10%; font-size:15px;">table</button>
+        <button id="sevenpac" style="margin-left:10%; font-size:15px;">Prac Fee</button>
+
+
+<script src="jquery.min.js" type="text/javascript"></script>
+<script src="extension.js" type="text/javascript"></script>
+<script src="rocketfun.js" type="text/javascript"></script>
+
+</body>
+</html>
