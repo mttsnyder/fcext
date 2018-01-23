@@ -183,14 +183,14 @@ $("#twopac").click(function () {
                         else {
                             tunpaid = tunpaid + parseFloat($(".col_insurance_balance")[k].innerHTML.trim().substr(1));
                             tmpt = parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
-                            jojo = parseFloat($(".col_insurance_paid")[k].innerHTML.trim().substr(1));
+                            jojo = parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1));
                             if (isNaN(tmpt)) {
                                 suckah = 0;
                                 if (isNaN(jojo)) {
                                     peeps = 0;
                                 }
                                 else {
-                                    peeps = $(".col_insurance_paid")[k].innerHTML.trim().substr(1);
+                                    peeps = $(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1);
                                 }
                             } else {
                                 suckah = parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
@@ -198,7 +198,7 @@ $("#twopac").click(function () {
                                     peeps = 0;
                                 }
                                 else {
-                                    peeps = $(".col_insurance_paid")[k].innerHTML.trim().substr(1);
+                                    peeps = $(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1);
                                 }
 
                             }
@@ -388,8 +388,8 @@ $("#twopac").click(function () {
                         }
 
 
-                        if ($(".col_insurance_paid:eq(" + i + ")").children(a).length > 0) {
-                            tempinp = parseFloat($(".col_insurance_paid:eq(" + i + ")").children(a).html().trim().substr(1));
+                        if ($(".col_insurance_amount_paid:eq(" + i + ")").children(a).length > 0) {
+                            tempinp = parseFloat($(".col_insurance_amount_paid:eq(" + i + ")").children(a).html().trim().substr(1));
                             if (isNaN(tempinp)) {
                             }
                             else {

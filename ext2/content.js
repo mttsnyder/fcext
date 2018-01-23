@@ -13,6 +13,7 @@ chrome.runtime.onMessage.addListener(
     });
 
         if (loc==="https://secure.simplepractice.com/calendar/appointments") {
+
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
                     console.log(sender.tab ?
@@ -78,24 +79,24 @@ chrome.runtime.onMessage.addListener(
         }
 
         if (loc.includes("https://secure.simplepractice.com/insights")){
-        chrome.runtime.onMessage.addListener(
-            function(request, sender, sendResponse) {
+            chrome.runtime.onMessage.addListener(
+                function(request, sender, sendResponse) {
 
-                console.log(sender.tab ?
-                    "from a content script:" + sender.tab.url :
-                    "from the extension");
-                repdat = $("table.report thead").html();
-                if (request.greeting == "report")
-                {
-                    rr = chrome.extension.getURL('report.html');
+                    console.log(sender.tab ?
+                        "from a content script:" + sender.tab.url :
+                        "from the extension");
+                    repdat = $("table.report thead").html();
+                    if (request.greeting == "report")
+                    {
+                        rr = chrome.extension.getURL('report.html');
 
-                    window.open(rr);
+                        window.open(rr);
 
-                    sendResponse(repdat);
+                        sendResponse(repdat);
 
 
-                   }
-            });
+                    }
+                });
 
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {

@@ -45,6 +45,7 @@ chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {
                     });
                 })
             });
+
         }
 
 
@@ -81,15 +82,17 @@ chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {
                     });
                 })
             });
+            $("#repbutt").click(function () {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {a=tabs[0];
+                    chrome.tabs.sendMessage(a.id, {greeting: "report"}, function(response) {
+                        repdat=response;
+
+                        return repdat;
+
+                    });})});
                $("#title").html("Full Circle Simple Practice Extension - Reports");
                $("#tab1").css("display","none");
-        $("#repbutt").click(function () {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {a=tabs[0];
-                chrome.tabs.sendMessage(a.id, {greeting: "report"}, function(response) {
-                    repdat=response;
-                    return repdat;
-
-                });})});}
+        }
 
     })});
 
