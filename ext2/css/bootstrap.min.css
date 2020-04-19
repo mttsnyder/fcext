@@ -192,10 +192,13 @@ td, th {
 
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
+  .test {
+    background-color: #e8faec;
+  }
     *, :after, :before {
-        color: #000 !important;
+        /*color: #000 !important;*/
         text-shadow: none !important;
-        background: 0 0 !important;
+        /*background: 0 0 !important;*/
         -webkit-box-shadow: none !important;
         box-shadow: none !important
     }
@@ -259,7 +262,7 @@ td, th {
     }
 
     .table td, .table th {
-        background-color: #fff !important
+        /*background-color: #fff !important*/
     }
 
     .table-bordered td, .table-bordered th {
