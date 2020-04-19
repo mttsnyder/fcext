@@ -11,7 +11,7 @@
     },
     "content_scripts": [{
         "matches": ["<all_urls>"],
-        "all_frames": true,
+        "all_frames": false,
         "js":      ["jquery.min.js","content.js","rocketfun.js"]
     }],
     "permissions": [
@@ -28,4 +28,3 @@
 
     ]
 }
-

@@ -2,17 +2,43 @@
 //
 //
 
-loc=location.href;
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log(sender.tab ?
+            "content script" + sender.tab.url :
+            "from the extension");
+        repdat = $("table.report thead").html();
+
+        if (request.greeting == "litmus")
+            {console.log("litmus");
+            resp1=window.location.href;
+            console.log(resp1);
+            sendResponse(resp1);};
+        if (request.greeting == "report")
+        {
+            rr = chrome.extension.getURL('report.html');
+            console.log(rr);
+            window.open(rr);
+
+            sendResponse(repdat);
+
+        }
+    });
+
+$(window).load(function() {
+
+loc =document.getElementsByTagName("title")[0].text;
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         console.log(sender.tab ?
             "from a content script:" + sender.tab.url :
             "from the extension");
         if (request.greeting == "litmus")
+          
             sendResponse(loc);
     });
 
-        if (loc==="https://secure.simplepractice.com/calendar/appointments") {
+        if (loc==="Calendar - SimplePractice") {
 
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
@@ -78,25 +104,8 @@ chrome.runtime.onMessage.addListener(
                 });
         }
 
-        if (loc.includes("https://secure.simplepractice.com/insights")){
-            chrome.runtime.onMessage.addListener(
-                function(request, sender, sendResponse) {
+       /* if (loc.includes("https://secure.simplepractice.com/insights")){*/
 
-                    console.log(sender.tab ?
-                        "from a content script:" + sender.tab.url :
-                        "from the extension");
-                    repdat = $("table.report thead").html();
-                    if (request.greeting == "report")
-                    {
-                        rr = chrome.extension.getURL('report.html');
-
-                        window.open(rr);
-
-                        sendResponse(repdat);
-
-
-                    }
-                });
 
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
@@ -130,7 +139,7 @@ chrome.runtime.onMessage.addListener(
 
                 console.log(sender.tab ?
                     "from a content script:" + sender.tab.url :
-                    "from the extension");
+                    "from the extension simple practice report");
                 repdat = $("table.report tbody").html();
                 redhead = $("table.report thead").html();
                 datran = $("#insightsdaterangepicker").val();
@@ -140,9 +149,9 @@ chrome.runtime.onMessage.addListener(
                 if (request.greeting == "newrep")
                 {
                     sendResponse(package);
-
+                    console.log('ping recieved');
                 }
-            });}
+            });
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -158,43 +167,17 @@ chrome.runtime.onMessage.addListener(
             $("input[name*='billing_provider[tax_id]']").val(nam);
             $("input[name*='billing_provider[npi]']").val(np);
             $("input[name*='billing_provider[taxonomy_code]']").val(tc);
-
-
+            for (i = 0;  i < 6 ;i++) {
+                if ($("input[name*='claim[service_lines]["+i+"][rendering_provider][last_name]']").val()=="")
+                    {return;}
+                else
+                    {
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][last_name]']").val(ln);
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][first_name]']").val(fn);
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][npi]']").val(np);
+                }
+            }
         }
     });
-
-        if (loc.includes('https://accounting.waveapps.com')){
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-                    console.log(sender.tab ?
-                        "from a content script:" + sender.tab.url :
-                        "from the extension");
-                    tabhead = $("table thead tr").html();
-                    if (request.greeting == "wavtrig")
-                    {
-                        trr = chrome.extension.getURL('wreport.html');
-
-                        window.open(trr);
-
-                        sendResponse(tabhead);
-
-
-                    }
-
-                    if (request.greeting == "wave2"){
-                        wavetab=$("table").html();
-                        lendat=$(".financial-transaction-date input").length;
-                        datarr=[];
-                        for (i=0;i<lendat; i++)
-                        {
-                           datarr.push($(".financial-transaction-date input")[i].value);
-                        }
-
-                        start = $(".date-filled")[0].value;
-                        end = $(".date-filled")[1].value;
-                        Group = {wavetab:wavetab, start:start, end:end, datarr:datarr};
-                        sendResponse(Group);
-                    }
-
-    });}
-
+    console.log( "ready!" );
+});

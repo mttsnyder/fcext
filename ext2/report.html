@@ -55,14 +55,14 @@
             padding:1%;
             font-size:20px;
             width:30%;
-            margin-left:2%
+            margin-left:0%
         }
         .second {
             float: left;
             padding: 1%;
             font-size:20px;
             width:30%;
-            margin-left:2%
+            margin-left:0%
         }
         #cont {
             padding: 1%;
@@ -70,6 +70,7 @@
             margin-left:2.5%;
         }
         #sums {
+            width:350px;
            /* float:left;
             margin-right:30px;*/
            /* border-top: solid;
@@ -79,6 +80,9 @@
         @media print {
             button {
                 display:none;
+            }
+            .test {
+              background-color: #e8faec;
             }
         }
         #sign, #clsums, #sums {
@@ -107,13 +111,16 @@
             border: solid 0.5px;
 
         }
+        .test {
+          background-color: #e8faec;
+        }
 
     </style>
 </head>
 <body>
 <div id="printthis" class="container">
     <div class="page-header">
-        <h2>Full Circle Insurance Report Thingy</h2>
+        <h2 style='color:darkgreen'>Full Circle Insurance Report Thingy</h2>
         <h4 id="date"></h4>
         <h4 id="name"></h4>
         <img src="FC.jpg">
@@ -125,9 +132,9 @@
 
 
     <div id="cont">
-        <div id="sums" class="first"></div>
         <div id="clsums" class="second"></div>
         <div id="sign" class="second"></div>
+        <div id="sums" class="first"></div>
     </div>
 <div id="repcon"></div>
 </div>
@@ -140,7 +147,11 @@
         <button id="fivepac" style="margin-left:10%; font-size:15px;">abbv names</button>
         <button id="sixpac" style="margin-left:10%; font-size:15px;">table</button>
         <button id="sevenpac" style="margin-left:10%; font-size:15px;">Prac Fee</button>
-
+        <button id="eightpac" style="margin-left:10%; font-size:15px;">Low Cost Fee</button>
+        <button id="ninepac" style="margin-left:10%; font-size:15px;">Client or No</button>
+        <button id="tenpac" style="margin-left:10%; font-size:15px;">LPCA Fee</button>
+        <button id="elevenpac" style="margin-left:10%; font-size:15px;">Color</button>
+        <button id="twelvepac" style="margin-left:10%; font-size:15px;">Ins Unpaid</button>
 
 <script src="jquery.min.js" type="text/javascript"></script>
 <script src="extension.js" type="text/javascript"></script>
