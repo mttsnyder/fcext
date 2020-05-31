@@ -193,7 +193,7 @@ $("#twopac").click(function () {
                                     }
 
                                 }
-                                EstInc = EstInc + 100.52 - suckah - peeps;
+                                EstInc = EstInc + 103.85 - suckah - peeps;
                             }
                         }
                         if (pump == "UNBILLED") {
@@ -250,7 +250,7 @@ $("#twopac").click(function () {
                 Avgcopay=Avgcopay.toFixed(2);
                 Avgnoninsclpay=(noninschrg/noninssessions);
                 Avgnoninsclpay=Avgnoninsclpay.toFixed(2);
-                Esttotreimb=(totinsses*100.52)-realcopay;
+                Esttotreimb=(totinsses*103.85)-realcopay;
                 Esttotreimb=Esttotreimb.toFixed(2);
                 avginspay=0;
                 avginspay=(Esttotreimb/totinsses);
@@ -307,7 +307,7 @@ $("#twopac").click(function () {
                             totsuphalfee = totsuphalfee + (feather * .085);
                             beak = beak + feather;
                         }
-                        totfulfee = tail * 18;
+                        totfulfee = tail * 14;
                     }
                 }
                 totf = tot - 1;
@@ -320,7 +320,7 @@ $("#twopac").click(function () {
                 projinstot = parseFloat(tpaid) + parseFloat(EstInc);
                 pertotins = parseFloat((parseFloat(projinstot) / parseFloat(EstTot)) * 100).toFixed(0);
                 avfe=(totcoll/totf).toFixed(2);
-                fgf=parseFloat(totinsses*100.52)+parseFloat(noninschrg);
+                fgf=parseFloat(totinsses*103.85)+parseFloat(noninschrg);
                 fgf=fgf.toFixed(2);
                 favg=fgf/tot;
                 favg=favg.toFixed(2);
@@ -330,7 +330,7 @@ $("#twopac").click(function () {
                 Amntrem=Amntrem.toFixed(2);
                 amntpdsofarper=(totcoll/fgf)*100;
                 amntpdsofarper=amntpdsofarper.toFixed(0);
-                totrev=parseFloat(totinsses*100.52)+parseFloat(noninschrg);
+                totrev=parseFloat(totinsses*103.85)+parseFloat(noninschrg);
                 totrev=totrev.toFixed(2);
                 Amntremper=(Amntrem/fgf)*100;
                 Amntremper=Amntremper.toFixed(0);
