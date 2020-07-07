@@ -13,15 +13,15 @@ $("#twopac").click(function () {
             $("#sums").html('');
             $("#clsums").html('');
             $("#sign").html('');
-            $("#tablethingy").append(package2["head"]);
+            //$("#tablethingy").append(package2["head"]);
             $("#tablethingy").append(package2["body"]);
             $("#date").append(package2["date"]);
             $("#name").append(package2["name"]);
 
             //here is where we need to put in gates for different reporting option
             //for the session report page
-            if (package2["loc"] == "https://secure.simplepractice.com/reports/appointments") {
-
+            if (package2["loc"].includes("https://secure.simplepractice.com/reports/appointments")) {
+                console.log("includes");
                 //define variables
                 //total billed
                 totbilled = 0;
@@ -57,74 +57,86 @@ $("#twopac").click(function () {
 
                 EstInc = 0;
                 //tot variable length of number of entries
-                tot = $(".col_fee").length-1;
+                tot = $("table tbody tr").length;
 
+                totf=0;
+                    for (v = 0; v < tot; v++) {
+                        console.log("first b"+v);
+                        if ($('table tbody tr:eq('+ v +') td')[12].innerText.length>0)
+                          { console.log(v);
+                            totf=totf+1;
+                            console.log(totf);
+                          }
+                        }
+
+                  totnf = tot - totf;
                 //loop through all rows
 
-                for (k = 1; k <= tot; k++) {
+                for (i = 0; i < tot; i++) {
 
                     //calculate Total Amount Billed for Time Period; if fee is empty, skip
-                    if (isNaN(parseFloat($(".col_fee")[k].innerHTML.trim().substr(1)))) {
+                  /*  if (isNaN(parseFloat($("table tbody tr:eq("+k+") td:eq(6)")[k].innerHTML.trim().substr(1)))) {
                     }
                     //if fee is not empty, then add to running total of amount billed
                     else {
                         totbilled = totbilled + parseFloat($(".col_fee")[k].innerHTML.trim().substr(1));
-                    }
+                    }*/
                     //Calculate total charged to client for Time period; if copay/client charge is empty, skip
-                    if (isNaN(parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1)))) {
+
+                    if (isNaN(parseFloat($('table tbody tr:eq('+i+') td:eq(8)')[0].innerHTML.trim().substr(1)))) {
                     }
                     //if client charge is not empty, then add to running tally for total billed to client
                     else {
-                        totclchrg = totclchrg + parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
+                        totclchrg = totclchrg + parseFloat($("table tbody tr:eq("+ i +") td:eq(8)").html().trim().substr(1));
                         //calculate number of low cost session (<50)
-                        if(parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1))>50){
+                        if(parseFloat($("table tbody tr:eq("+ i +") td:eq(8)").html().trim().substr(1))>49){
                             numgt60 = numgt60 +1;
-                            greaterthan60 = greaterthan60 + parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
+                            greaterthan60 = greaterthan60 + parseFloat($("table tbody tr:eq("+ i +") td:eq(8)").html().trim().substr(1));
                         }
                         else {
-                            lessthan60 = lessthan60 + parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
+                            lessthan60 = lessthan60 + parseFloat($("table tbody tr:eq("+ i +") td:eq(8)").html().trim().substr(1));
                         }
                     }
 
                     //if paid amount for client charge is not zero, then count it and count the amount
-                    if ($(".col_client_paid_status")[k].children.length > 0) {
+                    if (isNaN($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1))) {}
+                    else {
                         //define variable for status string for client charge
-                        var clump = $(".col_client_paid_status")[k].children[0].innerHTML;
+                        var clump = $("table tbody tr:eq("+i+") td:eq(7)")[0].children[0].children[0].innerHTML;
                         //test if it is various values
                         if (clump == "PAID") {
                             //count session if indicated as paid
                             clpaid = clpaid + 1;
                         }
                         //if paid amount is null, skip
-                        if (isNaN(parseFloat($(".col_client_paid")[k].innerHTML.trim().substr(1)))) {
+                        if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1)))) {
                         }
                         //if paid amount is not null, then add to running total
                         else {
-                            cltpaid = cltpaid + parseFloat($(".col_client_paid")[k].innerHTML.trim().substr(1));
+                            cltpaid = cltpaid + parseFloat($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1));
                         }
 
                         if (clump == "UNPAID") {
                             clunpaid = clunpaid + 1;
                         }
 
-                        if (isNaN(parseFloat($(".col_balance")[k].innerHTML.trim().substr(1)))) {
+                        if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(11)")[0].innerHTML.trim().substr(1)))) {
                         }
                         //if paid amount is not nul, then add to running total
                         else {
-                            cltunpaid = cltunpaid + parseFloat($(".col_balance")[k].innerHTML.trim().substr(1));
+                            cltunpaid = cltunpaid + parseFloat($("table tbody tr:eq("+i+") td:eq(11)")[0].innerHTML.trim().substr(1));
                         }
                         if (clump == "UNBILLED") {
                             clunbilled = clunbilled + 1;
 
 
-                        if (isNaN(parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1)))) {
+                        if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1)))) {
                         }
                         //if paid amount is not nul, then add to running total
                         else {
-                            cltunbilled = cltunbilled + parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
-                        }}
-                    }
-                    else {
+                            cltunbilled = cltunbilled + parseFloat($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1));
+                        }
+                      }
                     }
 
 
@@ -133,30 +145,31 @@ $("#twopac").click(function () {
 
                     //repeat for insurance payments
 
-                    if ($(".col_insurance_paid_status")[k].children.length > 0) {
+                    if ($("table tbody tr:eq("+i+") td:eq(12)")[0].children[0].children[0].innerHTML.length > 0) {
 
                         //if paid status is not empty, then add one to the count of paid sessions and add amount billed to total billed for insurance sessions
                         totinsses = totinsses + 1;
                         //add amount charged to insurance for each session that was billed to insurance
-                        totinssesamnt = totinssesamnt + parseFloat($(".col_insurance_charge")[k].innerHTML.trim().substr(1));
+                        totinssesamnt = totinssesamnt + parseFloat($("table tbody tr:eq("+i+") td:eq(13)")[0].innerHTML.trim().substr(1));
                         //add copay amount for each session billed to insurance
-                        if($(".col_client_charge")[k].innerHTML.trim().substr(1).length>0)
-                          {
-                          realcopay = realcopay + parseFloat($(".col_client_charge")[k].innerHTML.trim().substr(1));
-                          if ($(".col_client_paid")[k].innerHTML.trim().substr(1).length>0)
-                          {
-                            realcopaypaid = realcopaypaid + parseFloat($(".col_client_paid")[k].innerHTML.trim().substr(1));
+                        if(isNaN($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1)))
+                          {}
+                          else{
+                          realcopay = realcopay + parseFloat($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1));
+                          if (isNaN($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1)))
+                          {}
+                          else{
+                            realcopaypaid = realcopaypaid + parseFloat($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1));
                           };
                         };
                         //create holding variable for insurance paid status
-                        var pump = $(".col_insurance_paid_status")[k].children[0].innerHTML;
+                        var pump = $("table tbody tr:eq("+i+") td:eq(12)")[0].children[0].children[0].innerHTML;
 
                         if (pump == "PAID") {
                             paid = paid + 1;
-                            if (isNaN(parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1)))) {
-                            }
+                            if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1)))) {}
                             else {
-                                tpaid = tpaid + parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1));
+                                tpaid = tpaid + parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
                             }
                         }
 
@@ -166,13 +179,13 @@ $("#twopac").click(function () {
                         if (pump == "UNPAID"||"UNBILLED") {
                             unpaid = unpaid + 1;
 
-                            if (isNaN(parseFloat($(".col_insurance_balance")[k].innerHTML.trim().substr(1)))) {
+                            if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1)))) {
                             }
                             else {
-                                tunpaid = tunpaid + parseFloat($(".col_insurance_balance")[k].innerHTML.trim().substr(1));
+                                tunpaid = tunpaid + parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
 
-                                tmpt = parseFloat($(".col_balance")[k].innerHTML.trim().substr(1));
-                                jojo = parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1));
+                                tmpt = parseFloat($("table tbody tr:eq("+i+") td:eq(15)")[0].innerHTML.trim().substr(1));
+                                jojo = parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
 
 
                                 if (isNaN(tmpt)) {
@@ -181,15 +194,15 @@ $("#twopac").click(function () {
                                         peeps = 0;
                                     }
                                     else {
-                                        peeps = parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1));
+                                        peeps = parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
                                     }
                                 } else {
-                                    suckah = parseFloat($(".col_balance")[k].innerHTML.trim().substr(1));
+                                    suckah = parseFloat($("table tbody tr:eq("+i+") td:eq(15)")[0].innerHTML.trim().substr(1));
                                     if (isNaN(jojo)) {
                                         peeps = 0;
                                     }
                                     else {
-                                        peeps = parseFloat($(".col_insurance_amount_paid")[k].innerHTML.trim().substr(1));
+                                        peeps = parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
                                     }
 
                                 }
@@ -199,17 +212,16 @@ $("#twopac").click(function () {
                         if (pump == "UNBILLED") {
                             unbilled = unbilled + 1;
 
-                            if (isNaN(parseFloat($(".col_insurance_balance")[k].innerHTML.trim().substr(1)))) {
+                            if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(15)")[0].innerHTML.trim().substr(1)))) {
                             }
                             else {
 
-                                tunbilled = tunbilled + parseFloat($(".col_insurance_charge")[k].innerHTML.trim().substr(1));
+                                tunbilled = tunbilled + parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1));
                             }
                         }
                     }
 
-                    else {
-                    }
+                    else {}
                 }
                 //define variables for calculations
 
@@ -292,9 +304,9 @@ $("#twopac").click(function () {
                 //$("#clsums").append("Copays Charged: $" + realcopay + "</br>");
 
                 //count sessions above 60
-                for (j = 1; j <= tot; j++) {
+                for (j = 0; j < tot; j++) {
 
-                    feather = parseFloat($(".right.col_fee")[j].innerHTML.trim().substr(1));
+                    feather = parseFloat($("table tbody tr:eq("+j+") td:eq(6)")[0].innerHTML.trim().substr(1));
                     if (isNaN(feather)) {
                     }
                     else {
@@ -310,7 +322,7 @@ $("#twopac").click(function () {
                         totfulfee = tail * 14;
                     }
                 }
-                totf = tot - 1;
+                totf = tot;
                 unsix = totf - tail;
                 tothalfee = tothalfee.toFixed(2);
                 overallfee = parseFloat(totfulfee) + parseFloat(tothalfee);
@@ -345,7 +357,7 @@ $("#twopac").click(function () {
                 $("#sums").append("Estimated Amount Remaining to Be Paid: $" + Amntrem + "<br/>");
                 $("#sums").append("Estimated Avg Reimbursement per Session: $" + favg + "<br/>");
                 //$("#sums").append("Avg Session Fee: $" + avfe + "<br/>");
-                $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# Sess Costing <em>More than $50</em>: " + tail + "<br/>");
+                $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# Sess Costing <em> gt or = $50</em>: " + tail + "<br/>");
                 $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMonthly Fee for these sessions </br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp("+tail +" * 14): <b>$" + totfulfee + "</b><br/>");
                 $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# Sess Costing <em>Less than 50</em>: " + unsix + "<br/>");
                 $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMonthly Fee for these sessions: </br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp$"+ beak+" * 16%: <b>$" + tothalfee + "</b><br/>");
@@ -374,13 +386,26 @@ $("#twopac").click(function () {
                 totnf = tot - totf;
             }
             else {
-                tot = $("#tablethingy tr").length;
-                totf = $("td.col_insurance_claims a").length;
+              console.log('else');
+              tot = $("table tbody tr").length;
+              totf=0;
+
+              for (v = 0; v < tot; v++) {
+                console.log("first b"+v);
+                  if ($('table tbody tr:eq('+ v +') td')[12].innerText.length>0)
+                    { console.log(v);
+                      totf=totf+1;
+                      console.log(totf);
+                      }
+                      }
+
                 totnf = tot - totf;
-                for (i = 2; i < (tot - 3); i++) {
+
+              /*  to change name into initials
+              for (i = 2; i < (tot - 3); i++) {
 
                     $(".left.col_client_name a")[i].innerHTML = $(".left.col_client_name a")[i].innerHTML.split(" ")[0].substr(0, 1) + $(".left.col_client_name a")[i].innerHTML.split(" ")[1].substr(0, 1);
-                }
+                } */
                 $("#sums").append("Number of Claims: " + tot + "<br/>");
                 $("#sums").append("&nbsp&nbsp&nbsp&nbspNot Filed: " + totnf + "<br/>");
                 $("#sums").append("&nbsp&nbsp&nbsp&nbspFiled: " + totf + "<br/>");
@@ -403,31 +428,38 @@ $("#twopac").click(function () {
                     totinbf = 0;
                     totinbnf = 0;
 
-                    for (i = 1; i < (tot-1); i++) {
-                        if($(".left.col_insurance_paid_status:eq("+ i +")").children().length > 0)
-                          {coco = parseFloat($(".col_client_paid:eq(" + i + ")").html().trim().substr(1));
+                    for (i = 0; i < tot; i++) {
+                        if($('table tbody tr:eq('+ i +') td')[12].innerText.length > 0)
+                        //if insurance claim status is not blank, then assign value of what client paid to coco
+                          {coco = parseFloat($("table tbody tr:eq("+i+") td:eq(10)").html().trim().substr(1));
                             //realcopay=realcopay + coco;
                           }
                         else {};
-                        if ($(".col_insurance_claims:eq(" + i + ")").children().length > 0) {
-                            if (isNaN(parseFloat($(".col_fee:eq(" + i + ")").html().trim().substr(1)))) {
+                        //if insurance claim status is blank, then...
+                        if ($('table tbody tr:eq('+ i +') td')[12].innerText.length > 0) {
+                          //if insurance claim status is not blank,
+                            if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(6)").html().trim().substr(1)))) {
                             }
+                            //if fee is blank, then...
                             else {
-                                temptotbf = parseFloat($(".col_fee:eq(" + i + ")").html().trim().substr(1));
+                              //if fee is not blank, then assign fee value to temptotbf and then add to totbalf
+                                temptotbf = parseFloat($("table tbody tr:eq("+i+") td:eq(6)").html().trim().substr(1));
 
                                 totbalf = totbalf + temptotbf;
-                            }
-                            if (isNaN(parseFloat($(".col_insurance_charge:eq(" + i + ")").html().trim().substr(1)))) {
-                            }
+                                  }
+                                  //if insurance charge amount is not a number, then...
+                            if (isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(13)").html().trim().substr(1)))) {
+                                  }
+                                  //if insurance charge amount is a number, then get value of insurance charge and assign to temptotinbf, then add to totinbf
                             else {
-                                temptotinbf = parseFloat($(".col_insurance_charge:eq(" + i + ")").html().trim().substr(1));
+                                temptotinbf = parseFloat($("table tbody tr:eq("+i+") td:eq(13)").html().trim().substr(1));
 
                                 totinbf = totinbf + temptotinbf;
 
                             }
 
 
-                        }
+                            }
                         else {
                             temptotbnf = parseFloat($(".col_fee:eq(" + i + ")").html().trim().substr(1));
                             totbalnf = totbalnf + temptotbnf;
@@ -583,7 +615,7 @@ $("#twopac").click(function () {
         $("#sums").append("UNBILLED: " + clunbilled + "  ($" + cltunbilled + ")</br>");*/
 
 
-        $("#sums").append("Total Sessions >50: " + tail + "  (" + wing+"$)</br>");
+        $("#sums").append("Total Sessions >=50: " + tail + "  (" + wing+"$)</br>");
         $("#sums").append("Total Sessions <50: " + unsix + "  ("+beak+"$)</br>");
 
         var lpcaamt = tail*14;
@@ -639,5 +671,27 @@ $("#twopac").click(function () {
 
         };
       });
+    $("#thirteenpac").click(function () {
+      $("#sums").html('');
+      $("#sums").append("<h2 id=\"sumtit\" style='color:darkblue'>Monthly Audit Report</h2>");
+      //$("#sums").append("Total Charged for Sessions: $" + totbilled + "</br>");
+      $("#sums").append("Total # of Sessions: " + tot + "<br/>");
+      $("#sums").append("Estimated Total Reimbursement: $" + fgf + "<br/>");
+      $("#sums").append("Amount Paid for Sessions So Far: $" + totcoll + " ("+amntpdsofarper+"%)</br>");
+      $("#sums").append("Estimated Amount Remaining to Be Paid: $" + Amntrem + "<br/>");
+      $("#sums").append("Estimated Avg Reimbursement per Session: $" + favg + "<br/>");
+      //$("#sums").append("Avg Session Fee: $" + avfe + "<br/>");
+      $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# Sess Costing <em> gt or = $50</em>: " + tail + "<br/>");
+
+      $("#sums").append("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# Sess Costing <em>Less than 50</em>: " + unsix + "<br/>");
+
+      $("#sums").css("display", "block");
+      $("#repcon").html('');
+      $("#repcon").append("</br>" + "Narrative Summary:</br>" + "      There were " + tot + " total sessions during this period. " + totinsses + " of them were billed to insurance, which represented " + perins + "%. " +
+          "There were thus " + ppsess + " sessions remaining that were private pay, or " + ppsessper + "%.  Estimated total revenue billed during this period was $" + totrev + ".  Total revenue " +
+          "collected at this point is " + totcoll + ", which represents " + amntpdsofarper + " % of estimated total billed.  Estimated remaining revenue incoming is " + Amntrem + ", or " + Amntremper + "%.  " +
+          "Percent of total projected revenue coming from insurance is estimated to be " + perfromins + "%, and from private pay is " + (100 - perfromins) + "%.");
+
+        });
 
     }); //twopac function close

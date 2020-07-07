@@ -1,6 +1,28 @@
 // content.js
 //
 //
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log(sender.tab ?
+            "content script" + sender.tab.url :
+            "from the extension");
+
+            if (request.greeting == "chdate")
+            {
+                setthis = $(".last-edited-note");
+              for (i=0; i<2; i++)
+              {
+                if(confirm("Use date of session?"))
+                {
+                  setthis[i].innerText= "Created by Matthew Snyder, PsyD, LPCS on "+ $(".date")[0].innerText;
+                }
+                else {
+                setthis[i].innerText= "Created by Matthew Snyder, PsyD, LPCS on "+ request.chdate;
+              }
+            }
+
+            }
+          });
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -34,7 +56,7 @@ chrome.runtime.onMessage.addListener(
             "from a content script:" + sender.tab.url :
             "from the extension");
         if (request.greeting == "litmus")
-          
+
             sendResponse(loc);
     });
 
@@ -51,17 +73,18 @@ chrome.runtime.onMessage.addListener(
                     d4 = $(".fc-day-top.fc-sun")[3].dataset.date;
                     d5 = $(".fc-day-top.fc-sun")[4].dataset.date;
                     d6 = $(".fc-day-top.fc-sun")[5].dataset.date;
-                    wk1 = $(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
-                    wk2 = $(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
+                    wk1 = $(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length - $(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(0).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
+                    wk2 = $(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length- $(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(1).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
 
-                    wk3 = $(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
+                    wk3 = $(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length- $(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(2).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
 
-                    wk4 = $(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
-                    wk5 = $(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
-                    wk6 = $(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length;
+                    wk4 = $(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length- $(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(3).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
+                    wk5 = $(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length- $(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(4).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
+                    wk6 = $(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end").length-$(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-non-client").length- $(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-cancelled").length-$(".fc-week:eq(5).fc-widget-content div.fc-content-skeleton table tbody tr td.fc-event-container a.fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end.fc-event-office.office-color-5.fc-event-late-cancelled").length;
                     dat = {a: wk1, b: wk2, c: wk3, d: wk4, e: wk5, f: wk6, g: d1, h: d2, i: d3, j: d4, k: d5, l: d6};
                     if (request.greeting == "hello")
                         sendResponse(dat);
+                        console.log(dat);
                 });
 
             chrome.runtime.onMessage.addListener(
@@ -101,6 +124,7 @@ chrome.runtime.onMessage.addListener(
                             $("#test").append("<img id='i' style='width:5%;height:5%' src='chrome-extension://megobhkhgbimlaahnhoblonlciocbafl/FC.jpg'>");
                         }
                     }
+
                 });
         }
 
@@ -136,16 +160,18 @@ chrome.runtime.onMessage.addListener(
 
         chrome.runtime.onMessage.addListener(
             function(request, sender, sendResponse) {
-
+                console.log("shaza");
                 console.log(sender.tab ?
-                    "from a content script:" + sender.tab.url :
-                    "from the extension simple practice report");
-                repdat = $("table.report tbody").html();
-                redhead = $("table.report thead").html();
-                datran = $("#insightsdaterangepicker").val();
-                nam=$("#report_params_clinician_id option:selected").text();
+                    "from a mars:" + sender.tab.url :
+                    "from your mont");
+                repdat = $("table:eq(0)").html();
+                console.log(repdat);
+                redhead = $("table thead:eq(0)").html();
+                datran = $("input[name='daterangepicker']").val();
+                nam=$("select[name='clinicianId'] option:selected").text();
                 loc = location.href;
                 package = {head: redhead, body: repdat, date: datran, name: nam, loc:loc};
+                console.log(package);
                 if (request.greeting == "newrep")
                 {
                     sendResponse(package);
@@ -155,6 +181,9 @@ chrome.runtime.onMessage.addListener(
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+      console.log(sender.tab ?
+          "from a content script:" + sender.tab.url :
+          "from the extension simple practice report");
         if (request.greeting == "taxid")
         {
             nam=request.data;
@@ -178,6 +207,7 @@ chrome.runtime.onMessage.addListener(
                 }
             }
         }
+
     });
     console.log( "ready!" );
 });

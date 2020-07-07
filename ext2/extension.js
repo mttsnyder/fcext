@@ -3,6 +3,7 @@ $("table").css("font-size","13px");
 
 chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {a=tabs[0];
     chrome.tabs.sendMessage(a.id, {greeting: "litmus"}, function(response) {
+
          loc=response;
         console.log(loc);
         if (loc.includes("https://secure.simplepractice.com/calendar")) {
@@ -74,9 +75,13 @@ chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {
             }}*/
 
         };
-            $("#repbutt").click(function () {
+
+
+        $("#repbutt").click(function () {
+
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {a=tabs[0];
                     chrome.tabs.sendMessage(a.id, {greeting: "report"}, function(response) {
+                      alert("rptd");
                         repdat=response;
                         console.log(repdat);
                         return repdat;
@@ -125,3 +130,14 @@ $("#taxid").click(function (){
         chrome.tabs.sendMessage(a.id, {greeting: "taxid", data:nam, fn: fn, ln:ln, np:np, tc:tc}, function(response) {})});
 
 });
+
+$("#chdate").click(function (){
+  prchdate = prompt("What date would you like to change to?")
+
+  chrome.tabs.query({url: "https://secure.simplepractice.com/appointments/*"}, function(tabs) {a=tabs[0];
+      chrome.tabs.sendMessage(a.id, {greeting: "chdate", chdate: prchdate}, function(response) {
+
+      })});
+
+
+  });
