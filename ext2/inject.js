@@ -9,7 +9,7 @@
 //set listerner for button click for magic button, run function..
 $("#magic").on('click',function(){
   //log to console that button was clicked and function run
-  console.log("Magic Button clicked and function to get data and pass into dom run");
+  console.log("Magic Button clicked and function triggered to get data and pass into DOM.");
   //get data from ember data object and log steps to console
   if($(".page-header h2").html().includes("Appointment Status"))
   { console.log("Appointment Status Page");
@@ -24,8 +24,6 @@ $("#magic").on('click',function(){
   acer=coke['view:-outlet'].container.cache["controller:reports/appointments"].filteredRecords;
   //get length of object/array containing rows of data
   trust=acer.length;
-  
- 
   //remove the hidden divs if it exists
   $("#hiddiv").remove();
   $("#hiddiv2").remove();
@@ -35,38 +33,16 @@ $("#magic").on('click',function(){
 //create second hidden div to hold ajax claim info
   $("body").append("<div id=hiddiv2 style=display:none></div>");
   $("body").append("<div id=hiddiv3 style=display:none></div>");
-  //$("body").append("<script id='scrt1'></script>");
-  //$.ajax({url: "https://secure.simplepractice.com/clients/e4dd12afc347cf67/insurance_claims/62341989", success: function(result){
-	//console.log("ajax complete, data gathered");
-	//$("#hiddiv3").append(result);
-	//ggg=gon.claim_params.claim.service_lines[0];
-	//console.log(ggg);
-  //}});
-  //load claim through ajax
-  //$("#hiddiv3").load("https://secure.simplepractice.com/clients/05ffec6b6dcd9393/insurance_claims/60139301", function(){
-  //console.log("hiddiv3 loaded");
-  //  tempscr=$("#hiddiv3 script:eq(5)").html();
-  //$("#scrt1").append(tempscr);
   // loop through rows of data and add data to table
   		for (i=0;i<trust;i++)
 		{ 
 			// set each row to puck variable
 			puck= acer[i];
 			//append row div and data from puck to hidtable
-			$("#hidtable").append("<tr><td>"+puck['createdAt']+"</td><td>"+puck['clientName']+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+puck['controlNumber']+"</td><td>"+puck['paymentReferenceId']+"</td><td>"+puck['insuranceClaimClientHashedId']+"</td><td>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td></tr>");
-			//$("#hiddiv2").load("https://secure.simplepractice.com/clients/"+puck['insuranceClaimClientHashedId']+"/insurance_claims/"+puck['eligibleInsuranceClaimId'],function(){
-		    //$("#hiddiv2").load("https://secure.simplepractice.com/clients/05ffec6b6dcd9393/insurance_claims/60139301",function(){
-			//ant=gon.claim_params.claim.service_lines;
-		    //bug=ant.length;
-		    //for (j=0;j<bug;j++){
-		    //fly=gon.claim_params.claim.service_lines[j].service_date_from;
-			//if (fly.length>0){
-			//$("#date"+j).html(fly);
-			//}
-			//else {}
-			//}
-			//end load function 
-			//});
+			duck = puck['cptCodes'][0];
+			truck= puck['ratesForAppointment'][0];
+			luck = puck['unitsForAppointment'][0];
+			$("#hidtable").append("<tr><td>"+puck['startTime']+"</td><td>"+puck['clientName']+"</td><td>"+puck['clinicianName']+"</td><td>"+duck+"</td><td>"+truck+"</td><td>"+luck+"</td><td>"+puck['fee']+"</td><td>"+puck['clientPaidStatus']+"</td><td>"+puck['clientCharge']+"</td><td>"+puck['uninvoicedFee']+"</td><td>"+puck['clientPaid']+"</td><td>"+puck['balance']+"</td><td>"+puck['insurancePaidStatus']+"</td><td>"+puck['insuranceCharge']+"</td><td>"+puck['insuranceAmountPaid']+"</td><td>"+puck['insuranceBalance']+"</td></tr>");
 			//end for loop
 		};	
 		//end ajax load success function
@@ -74,6 +50,7 @@ $("#magic").on('click',function(){
 		
 		//alert that data is ready for export
 		alert("data ready for export");
+  //end appointment status page section
   }
 		//end magic button click function
 		 else if($(".page-header h2").html().includes("Electronic Payment Reports"))
