@@ -808,7 +808,7 @@ $("#twopac2").click(function(){
 			//clear clsums
             $("#clsums").html('');
 			//create head object and set to DrP variable
-            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th style='border-right: 1px solid #111366;'>Payment Reference #</th><th>Clearinghouse Ref#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
+            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
 			//append head to table
             $("table").append(DrP.head);
 			//add body sent through with respopnse to body of table
@@ -820,7 +820,7 @@ $("#twopac2").click(function(){
 			//set thead position to relative
             $("thead").css('position','relative');
 			//excute datatable on tablethingy table
-            $("#tablethingy").DataTable({paging:false});
+            tab=$("#tablethingy").DataTable({paging:false});
 			//get number of rows in table and set to nrl variable
             nrl=$("#tablethingy tbody tr").length;
 			//create totalpay variable
@@ -873,8 +873,62 @@ $("#twopac2").click(function(){
 						  //get keys for service line object and measure length as index
 						  len=Object.keys(gon.claim_params.claim.service_lines).length;
 							//create for loop to loop through number of keys
+							dateone=0;
+							datetwo=0;
+							datethree=0;
+							datefour=0;
+							datefive=0;
+							datesix=0;							
+							
 							for (j=0;j<len;j++)
 							{
+								//when looping, depending on value of j, iterate count variables
+								switch(j) {
+								  
+								  //when j is 1, meaning that there is one column with a value
+								  case 1:
+								  //add one to each of two through six
+									
+									
+									break;
+								  case 2:
+									datetwo=datetwo+1;
+									
+								break;
+									case 3:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									
+									break;
+									case 4:
+									datetwo=datetwo+1;
+								datethree=datethree+1;
+								datefour=datefour+1;
+									
+									break;
+									case 5:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									
+									break;
+									case 6:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+									break;
+								  default:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+							}
+							
+					
 							 //access gon variable for this line of the services
 							 ggg=gon.claim_params.claim.service_lines[j];
 							 //create variable shifted from index to match data class
@@ -895,6 +949,22 @@ $("#twopac2").click(function(){
 				  
 				//end table row for loop
 			  }
+			  //loop through date columns and hide if empty
+			  if (datefive>0) 
+			  {tab.column(13).visible(false);
+			  }
+			  if (datefour>0) 
+			 {tab.column(12).visible(false);
+			 }
+			  if (datethree>0) 
+		     {tab.column(11).visible(false);
+			 }
+			//  if (datethree>0) 
+			//  {
+			//  }
+			//  if (datetwo>0) 
+			//  {
+			//  }
  		//end chrome send message function
 		});
 	//chrome query function end		
