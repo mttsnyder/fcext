@@ -841,7 +841,25 @@ $("#twopac2").click(function(){
 			  //fix decimals to 2 for totalpay variable
              totalpay=totalpay.toFixed(2);
 			 //add total pay value to clsums div
-             $("#clsums").append("Total Paid:"+totalpay);
+             $("#totalp").html("Total Paid: "+totalpay);
+			 tab.on('draw', function () {
+				 nlen=$("tbody tr").length;
+				 totalpay=0;
+				 for(k=0;k<nlen;k++)
+				 {
+					 hunger=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
+					 if(isNaN(hunger))
+						{}
+				    //if it is a number, add to total
+					else{
+						   unitt=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
+						   totalpay=totalpay+unitt;
+						}
+				 }
+				 totalpay=totalpay.toFixed(2);
+				  $("#totalp").html("Total Paid: "+totalpay);
+				 console.log('search');
+				 });
 			 //add hiddiv3 to body
 			 $("body").append("<div id='hiddiv3' style='display:none'></div>");
 			 //ajax call for date data
