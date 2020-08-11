@@ -115,6 +115,7 @@ $("#magic").on('click',function(){
 				  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid;
 				  urltmp2="https://secure.simplepractice.com/billings/insurance_payments/"+inpayid;
 				  urltmp3="https://secure.simplepractice.com/clients/"+hid+"/billing";
+				  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
 				  //if either hid or elid are null, then skiparoo
 				  if (hid=="null"||elid== "null")
 				  {cltag = puck['controlNumber'];}
@@ -122,6 +123,7 @@ $("#magic").on('click',function(){
 			      else {
 				  cltag="<a href="+urltmp+" target='_blank'>"+puck['controlNumber']+"</a>";
 				  cltag3="<a href="+urltmp3+" target='_blank'>"+puck['clientName']+"</a>";
+				  cltag4="<a href="+urltmp4+" target='_blank'>"+puck['createdAt']+"</a>";
 				  }
 				  if (inpayid=="null")
 				  {cltag2=puck['paymentReferenceId'];}
@@ -130,7 +132,7 @@ $("#magic").on('click',function(){
 				  }
 		
 			//append row div and data from puck to hidtable
-			$("#hidtable").append("<tr><td>"+puck['createdAt']+"</td><td>"+cltag3+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+cltag+"</td><td>"+cltag2+"</td><td class='inclhashid' style='display:none'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid' style='display:none'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td></tr>");
+			$("#hidtable").append("<tr><td>"+cltag4+"</td><td>"+cltag3+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+cltag+"</td><td>"+cltag2+"</td><td class='inclhashid' style='display:none'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid' style='display:none'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td></tr>");
 		};	
 		//alert that data is ready for export
 	  alert("data ready for export");  
