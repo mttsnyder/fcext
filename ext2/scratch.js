@@ -85,12 +85,18 @@ for (u=1;u<air;u++)
 														//;
 														console.log("u: "+u+"t: "+t+"g: "+g+"goo: "+goo);
 														ded=new Date(goo);
-														if(ded.getMonth()<9){
+														dedd=ded.getDate();
+														dedm=ded.getMonth()+1;
+														dedy=ded.getFullYear();
+																											
+														if(dedm<10){
 															console.log("lt 9 ");
-														ded="0"+ded.toLocaleDateString();
+														dedm='0'+dedm;
 														console.log(ded+kayoo);}
-														else {ded=ded.toLocaleDateString();
-														console.log("gt 9:"+ded+kayoo);}
+														if(dedd<10){
+														 dedd='0'+dedd;
+														 }
+														 ded=dedm+"/"+dedd+"/"+dedy;
 														if (kayoo==ded)
 															{console.log("kayoo = ded");
 																$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","green");
