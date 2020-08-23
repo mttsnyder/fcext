@@ -42,7 +42,20 @@ $("#magic").on('click',function(){
 			duck = puck['cptCodes'][0];
 			truck= puck['ratesForAppointment'][0];
 			luck = puck['unitsForAppointment'][0];
-			$("#hidtable").append("<tr><td>"+puck['startTime']+"</td><td>"+puck['clientName']+"</td><td>"+puck['clinicianName']+"</td><td>"+duck+"</td><td>"+truck+"</td><td>"+luck+"</td><td>"+puck['fee']+"</td><td>"+puck['clientPaidStatus']+"</td><td>"+puck['clientCharge']+"</td><td>"+puck['uninvoicedFee']+"</td><td>"+puck['clientPaid']+"</td><td>"+puck['balance']+"</td><td>"+puck['insurancePaidStatus']+"</td><td>"+puck['insuranceCharge']+"</td><td>"+puck['insuranceAmountPaid']+"</td><td>"+puck['insuranceBalance']+"</td></tr>");
+			//set client paid cell equal to snuck variable
+			snuck=puck['clientPaid'];
+			//if variable text includes "CR", then..
+			if (snuck.includes("CR"))
+			{
+				//transform string, removing CR and adding negative sign
+			    snuck="$-"+puck['clientPaid'].split(" ")[0].slice(1)
+			}
+			//if snuck doesn't include "CR", then...
+			else {
+				
+			}
+			//add numbers to cells in table
+			$("#hidtable").append("<tr><td>"+puck['startTime']+"</td><td>"+puck['clientName']+"</td><td>"+puck['clinicianName']+"</td><td>"+duck+"</td><td>"+truck+"</td><td>"+luck+"</td><td>"+puck['fee']+"</td><td>"+puck['clientPaidStatus']+"</td><td>"+puck['clientCharge']+"</td><td>"+puck['uninvoicedFee']+"</td><td>"+snuck+"</td><td>"+puck['balance']+"</td><td>"+puck['insurancePaidStatus']+"</td><td>"+puck['insuranceCharge']+"</td><td>"+puck['insuranceAmountPaid']+"</td><td>"+puck['insuranceBalance']+"</td></tr>");
 			//end for loop
 		};	
 		//end ajax load success function
@@ -93,33 +106,36 @@ $("#magic").on('click',function(){
 		{ 
 			// set each row to puck variable
 			puck= acer[i];
-			//append row div and data from puck to hidtable
-			$("#hidtable").append("<tr><td>"+puck['createdAt']+"</td><td>"+puck['clientName']+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+puck['controlNumber']+"</td><td>"+puck['paymentReferenceId']+"</td><td class='inclhashid'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td></tr>");
-			//$("#hiddiv2").load("https://secure.simplepractice.com/clients/"+puck['insuranceClaimClientHashedId']+"/insurance_claims/"+puck['eligibleInsuranceClaimId'],function(){
-		    //$("#hiddiv2").load("https://secure.simplepractice.com/clients/05ffec6b6dcd9393/insurance_claims/60139301",function(){
-			//ant=gon.claim_params.claim.service_lines;
-		    //bug=ant.length;
-		    //for (j=0;j<bug;j++){
-		    //fly=gon.claim_params.claim.service_lines[j].service_date_from;
-			//if (fly.length>0){
-			//$("#date"+j).html(fly);
-			//}
-			//else {}
-			//}
-			//end load function 
-			//});
-			//end for loop
-		};	
-		//end ajax load success function
-		//});
+			inpayid=puck['insurancePaymentId'];
+			hid=puck['insuranceClaimClientHashedId'];
+			
+                  //get value of eligible claim id in this row and save to elid variable
+				  elid=puck['eligibleInsuranceClaimId'];
+				  //build the url from these variables related to this row
+				  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid;
+				  urltmp2="https://secure.simplepractice.com/billings/insurance_payments/"+inpayid;
+				  urltmp3="https://secure.simplepractice.com/clients/"+hid+"/billing";
+				  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
+				  //if either hid or elid are null, then skiparoo
+				  if (hid=="null"||elid== "null")
+				  {cltag = puck['controlNumber'];}
+			      //if both hid and elid are not null, then function it up
+			      else {
+				  cltag="<a href="+urltmp+" target='_blank'>"+puck['controlNumber']+"</a>";
+				  cltag3="<a href="+urltmp3+" target='_blank'>"+puck['clientName']+"</a>";
+				  cltag4="<a href="+urltmp4+" target='_blank'>"+puck['createdAt']+"</a>";
+				  }
+				  if (inpayid=="null")
+				  {cltag2=puck['paymentReferenceId'];}
+			  else{
+				  cltag2="<a href="+urltmp2+" target='_blank'>"+puck['paymentReferenceId']+"</a>";
+				  }
 		
+			//append row div and data from puck to hidtable
+			$("#hidtable").append("<tr><td>"+cltag4+"</td><td>"+cltag3+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+cltag+"</td><td>"+cltag2+"</td><td class='inclhashid' style='display:none'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid' style='display:none'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td><td id='npi'></td></tr>");
+		};	
 		//alert that data is ready for export
-
-	  alert("data ready for export");
-  
-  
-  
-  
+	  alert("data ready for export");  
    }
   else{}
   });

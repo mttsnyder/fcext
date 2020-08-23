@@ -39,6 +39,9 @@ $("#twopac").click(function () {
 				{$("th:eq("+i+")").css("position","static")};
             //here is where we need to put in gates for different reporting option
             
+			//change any credits to negative number
+			
+			
 			//VARIABLES FOR CALCULTIONS
 			//for the session report page
             if (package2["loc"].includes("https://secure.simplepractice.com/reports/appointments")) {
@@ -582,16 +585,22 @@ $("#twopac").click(function () {
         }); //chrome send message close
        //chrome send message close
     }); //chrome tab query close
+	
+	//function to hide sums div on click
     $("#threepac").click(function () {
+		//set display status of sums div to gump variable
         gump=$("#sums").css("display");
         if (gump=="none"){
+			//if display of sums is set to none, change to block
             $("#sums").css("display","block");
         }
         else {
+			//if display is set to something else (block) set to none
         $("#sums").css("display","none");
             }
     });
-    $("#fourpac").click(function () {
+    //function to hide sign div on click
+	$("#fourpac").click(function () {
         sgump=$("#sign").css("display");
         if (sgump=="none"){
             $("#sign").css("display","block");
@@ -600,18 +609,19 @@ $("#twopac").click(function () {
             $("#sign").css("display","none");
         }
     });
-    $("#fivepac").click(function () {
+    //function to abbreviate names
+	$("#fivepac").click(function () {
         totT=$("table tbody tr").length;
-        pearl=$("table tbody tr:eq(0) td:eq(1) div a")[0].innerHTML.trim().length;
+        pearl=$("table tbody tr:eq(0) td:eq(1)")[0].innerHTML.trim().length;
         if(pearl>2){
         for (i = 0; i < totT; i++) {
 
-          if ($("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML.trim().split(" ").length>2)
+          if ($("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ").length>2)
           {
-            $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML.trim().split(" ")[2].substr(0,1);
+            $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[2].substr(0,1);
           }
           else
-            $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1) div a")[0].innerHTML.trim().split(" ")[1].substr(0,1);
+            $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[1].substr(0,1);
         }
 
     }
@@ -630,9 +640,9 @@ $("#twopac").click(function () {
         }
     });
     $("#sevenpac").click(function () {
-        yoyoma=$(".col_primary_code").length;
+        yoyoma=$("table tbody tr").length;
         for(m=1;m<yoyoma;m++){
-            beaver =$(".col_primary_code")[m].innerHTML.trim();
+            beaver =$("table tbody tr:eq("+m+") td:eq(3)")[0].innerHTML.trim();
             if (beaver="020202"){
              $(".tr:eq(m)").hide();
             }
@@ -674,11 +684,6 @@ $("#twopac").click(function () {
         $("#sums").append("<h2 id=\"sumtit\">LPCA Fees</h2>");
         $("#sums").append("Total Sesions: " + totf +"</br>");
         $("#sums").append("Total Client Charge: " + totclchrg + "</br>");
-       /* $("#sums").append("PAID: " + clpaid + "  ($" + cltpaid + ") " + clpaper + "%</br>");
-        $("#sums").append("UNPAID: " + clunpaid + "  ($" + cltunpaid + ")</br>");
-        $("#sums").append("UNBILLED: " + clunbilled + "  ($" + cltunbilled + ")</br>");*/
-
-
         $("#sums").append("Total Sessions >=50: " + tail + "  (" + wing+"$)</br>");
         $("#sums").append("Total Sessions <50: " + unsix + "  ("+beak+"$)</br>");
 
@@ -699,26 +704,38 @@ $("#twopac").click(function () {
         $("#sums").append("LPCA Pays to Supervisor: "+ lpcatosup +"</br>");
 
     });
+	//button to change color of unpaid sessions, on click run function...
     $("#elevenpac").click(function () {
+		//get length of table rows
        llen=$("table tbody tr").length;
+	   //change background color of amount in summary field
         $("#apsf").css("background-color","#e8faec");
+		//loop through rows in table
         for (i=0;i<llen;i++) {
-          if($("table tbody tr:eq("+i+") td:eq(12)").children().children()[0].innerHTML.length>0) {
+			//if insurance status is not empty
+          if($("table tbody tr:eq("+i+") td:eq(12)")[0].innerText.length>0) {
+			  //if table cell in insurance paid column is not a number...
               if(isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1)))) {
-
+								//add test class and log to console
                                   $("table tbody tr:eq("+i+") td:eq(12)").addClass("test"); console.log(i);
                 }
+				//if table cell in insurance paid column is a number...
               else {
+				  //change cell background color and log to console
                   $("table tbody tr:eq("+i+") td:eq(12)").css("background-color","#f7e4e4"); console.log(i);
                    };
                  };
+				 //if charge to client is a number, then...
           if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1)))) {
+			  //if amount paid cell to client is number, then...
             if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1)))){
+				//change background of cell 
               $("table tbody tr:eq("+i+") td:eq(10)").css("background-color","#cbd3f5");
             }
+			//if paid amount is not a number (empty), then...
             else{
+				//change background color of cell
               $("table tbody tr:eq("+i+") td:eq(10)").css("background-color","#f5f4d7");
-
             }
           }
              };
@@ -726,7 +743,7 @@ $("#twopac").click(function () {
     $("#twelvepac").click(function () {
         tllen=$("table tbody tr").length;
           for (i=0;i<tllen;i++) {
-              if($("table tbody tr:eq("+i+") td:eq(12)").children().children()[0].innerHTML.length>0) {
+              if($("table tbody tr:eq("+i+") td:eq(12)")[0].innerText.length>0) {
 
                   if(isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1)))) {}
 
@@ -767,6 +784,8 @@ $("#twopac").click(function () {
 //button click and function for electronic payments reports report/search thingamagigg
 $("#twopac2").click(function(){
     //click button to start process
+	
+	$("#wait").css("display","block");
     //send query to url and get id of simp prac browser window
     chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function (tabs) {
         //set id of main window to rocketman
@@ -789,7 +808,7 @@ $("#twopac2").click(function(){
 			//clear clsums
             $("#clsums").html('');
 			//create head object and set to DrP variable
-            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th style='border-right: 1px solid #111366;'>Payment Reference #</th><th>Clearinghouse Ref#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
+            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
 			//append head to table
             $("table").append(DrP.head);
 			//add body sent through with respopnse to body of table
@@ -801,7 +820,7 @@ $("#twopac2").click(function(){
 			//set thead position to relative
             $("thead").css('position','relative');
 			//excute datatable on tablethingy table
-            $("#tablethingy").DataTable({paging:false});
+            tab=$("#tablethingy").DataTable({paging:false});
 			//get number of rows in table and set to nrl variable
             nrl=$("#tablethingy tbody tr").length;
 			//create totalpay variable
@@ -822,7 +841,25 @@ $("#twopac2").click(function(){
 			  //fix decimals to 2 for totalpay variable
              totalpay=totalpay.toFixed(2);
 			 //add total pay value to clsums div
-             $("#clsums").append("Total Paid:"+totalpay);
+             $("#totalp").html("Total Paid: "+totalpay);
+			 tab.on('draw', function () {
+				 nlen=$("tbody tr").length;
+				 totalpay=0;
+				 for(k=0;k<nlen;k++)
+				 {
+					 hunger=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
+					 if(isNaN(hunger))
+						{}
+				    //if it is a number, add to total
+					else{
+						   unitt=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
+						   totalpay=totalpay+unitt;
+						}
+				 }
+				 totalpay=totalpay.toFixed(2);
+				  $("#totalp").html("Total Paid: "+totalpay);
+				 console.log('search');
+				 });
 			 //add hiddiv3 to body
 			 $("body").append("<div id='hiddiv3' style='display:none'></div>");
 			 //ajax call for date data
@@ -851,11 +888,74 @@ $("#twopac2").click(function(){
 						  console.log("ajax complete, data gathered");
 						  //add result into hidden div
 						  $("#hiddiv3").append(result);
+						  len=0;
+						  for (m=0;m<6;m++)
+						  {  if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
+							  {break}
+						  else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
+						  {break}
+					      else
+							{len=len+1;}}
+						  
 						  //get keys for service line object and measure length as index
-						  len=Object.keys(gon.claim_params.claim.service_lines).length;
+						  //len=Object.keys(gon.claim_params.claim.service_lines).length;
 							//create for loop to loop through number of keys
+							dateone=0;
+							datetwo=0;
+							datethree=0;
+							datefour=0;
+							datefive=0;
+							datesix=0;							
+							
 							for (j=0;j<len;j++)
 							{
+								//when looping, depending on value of j, iterate count variables
+								switch(j) {
+								  
+								  //when j is 1, meaning that there is one column with a value
+								  case 1:
+								  //add one to each of two through six
+									
+									
+									break;
+								  case 2:
+									datetwo=datetwo+1;
+									
+								break;
+									case 3:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									
+									break;
+									case 4:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									
+									break;
+									case 5:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									
+									break;
+									case 6:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+									break;
+									default:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+							}
+							
+					
 							 //access gon variable for this line of the services
 							 ggg=gon.claim_params.claim.service_lines[j];
 							 //create variable shifted from index to match data class
@@ -867,6 +967,7 @@ $("#twopac2").click(function(){
 							 //end for loop for object keys length (service dates)
 							}
 						//end ajax success function call
+						$("#wait").css("display","none");
 						  }
 				  //end ajax object
 				  });
@@ -875,9 +976,77 @@ $("#twopac2").click(function(){
 				  
 				//end table row for loop
 			  }
+			  //loop through date columns and hide if empty
+			  if (datefive>0) 
+			  {tab.column(14).visible(false);
+			  }
+			  if (datefour>0) 
+			 {tab.column(13).visible(false);
+			 }
+			  if (datethree>0) 
+		     {tab.column(12).visible(false);
+			 }
+			//  if (datethree>0) 
+			//  {
+			//  }
+			//  if (datetwo>0) 
+			//  {
+			//  }
  		//end chrome send message function
 		});
 	//chrome query function end		
     }); 
 //end twopac2 button click function
+});
+
+
+//function for when threepac2 button is clicked
+$("#threepac2").click(function() {
+	matchvar = prompt("Does the date range between the EPR and IRBC reports match?");
+	
+	if (matchvar) {
+		$.ajax({url: "https://secure.simplepractice.com/frontend/pay-periods?page%5Bsize%5D=50", 
+		success: function(result){
+			pp=result;
+			lennn=pp.data.length;
+			for (n=0;n<lennn;n++)
+			{
+				stid = pp.data[n].id;
+				star = pp.data[n].attributes.startsAt;
+				stard = new Date(star);
+				stardd = stard.toLocaleDateString();
+				Enn= pp.data[n].attributes.endsAt;
+				Ennd = new Date(Enn);
+				Enndd = Ennd.toLocaleDateString();
+				
+				$("#irbc").append("<option value='"+stid+"'>"+stardd+" - "+Enndd+"</option>");
+				
+				
+				
+				console.log("starts: "+stardd+"; Ends: "+Enndd);
+				
+			}
+  
+         }});
+		
+		
+		
+		
+		
+		
+	}
+	else{
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 });
