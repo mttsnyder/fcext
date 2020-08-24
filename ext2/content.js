@@ -197,5 +197,28 @@
                     dat = {a: wk1, b: wk2, c: wk3, d: wk4, e: wk5, f: wk6, g: d1, h: d2, i: d3, j: d4, k: d5, l: d6};
                     sendResponse(dat);
                     console.log(dat);}
+				if (request.greeting == "taxid")
+        {
+            nam=request.data;
+            fn=request.fn;
+            ln=request.ln;
+            np=request.np;
+            tc=request.tc;
+            $(".billing_provider_name.input:eq(1)").val(ln);
+            $(".billing_provider_name.input:eq(2)").val(fn);
+            $("input[name*='billing_provider[tax_id]']").val(nam);
+            $("input[name*='billing_provider[npi]']").val(np);
+            $("input[name*='billing_provider[taxonomy_code]']").val(tc);
+            for (i = 0;  i < 6 ;i++) {
+                if ($("input[name*='claim[service_lines]["+i+"][rendering_provider][last_name]']").val()=="")
+                    {return;}
+                else
+                    {
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][last_name]']").val(ln);
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][first_name]']").val(fn);
+                     $("input[name*='claim[service_lines]["+i+"][rendering_provider][npi]']").val(np);
+                }
+            }
+        }	
             //end add listener function
 			});

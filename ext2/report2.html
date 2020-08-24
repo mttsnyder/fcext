@@ -6,24 +6,17 @@
 
 <script src="jquery.min.js"></script>
   <script type="text/javascript" src="dataTables.js"></script>
-  <link rel="stylesheet" type="text/css" src="dataTables.css">
+  <!-- <link rel="stylesheet" type="text/css" src="dataTables.css"> -->
 
     <style>
-	    td.details-control {
-            background: url('../resources/details_open.png') no-repeat center center;
-            cursor: pointer;
-        }
-        tr.shown td.details-control {
-            background: url('../resources/details_close.png') no-repeat center center;
-        }
-        @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
+	    @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
         .container {
-            /*max-height: 600px;
+            <!--/*max-height: 600px;
             min-height: 300px;
             width: 250px;*/
             /*border: 2px solid rgba(0,0,0,0.3);
             border-radius: 2px;*/
-            background: white;
+            background: white;-->
 
         }
         body {
@@ -49,7 +42,7 @@
         tr:hover {background-color: #f5f5f5}
         .tab{
             display:flex;
-            margin-left:2.5%;
+            margin-left:0%;
             width:95%;
         }
         img {/*float: right;*/
@@ -77,7 +70,7 @@
         #cont {
             padding: 1%;
             width:95%;
-            margin-left:2.5%;
+            margin-left:0%;
         }
         #sums {
             width:350px;
@@ -128,15 +121,26 @@
     </style>
 </head>
 <body>
-<div id="printthis" class="container">
+<div id="printthis" class="container2" style="margin-left:20px">
     <div class="page-header">
+	
         <h2 style='color:darkgreen'>Full Circle EPR Search Thingy</h2>
         <h4 id="date"></h4>
         <h4 id="name"></h4>
-        <img src="FC.jpg">
+		<h4 id='irc'><a href="https://secure.simplepractice.com/reports/pay-periods/build?includeInsurance=true" target="_blank">Income Received By Clinician Report - Current</a></h4>
+		<h4 id='irc2'><a href="https://secure.simplepractice.com/reports/pay-periods" target="_blank">Income Received By Clinician Report - Past</a></h4>
+        <button id="threepac2" style="margin-left:10%; font-size:15px;">Get Data from IRBC Report</button>
+		<label for="cars">Choose an IRBC Report:</label>
+
+				<select name="irbc" id="irbc">
+						 
+				</select>
+		<h4>"Date Recieved" link below opens the appointment report for all sessions for that client</h4>
+		<img src="FC.jpg">
     </div>
 
     <div class="tab">
+	<h1 id='wait' style='display:none'>Please Wait... Loading</h1>
         <table id="tablethingy"></table>
     </div>
 
@@ -146,11 +150,13 @@
     </div>
 <div id="repcon"></div>
 </div>
+</br>
+<h2 id='totalp'>Total Paid: </h2>
 <div id="notesdiv" contenteditable="true">Notes:</div>
 
         </br>
-        <button id="twopac2" style="margin-left:10%; font-size:15px;">bring it</button>
-
+        <button id="twopac2" style="margin-left:10%; font-size:15px;">Gather Data from the Fields</button>
+		
 
 
 <script src="extension.js" type="text/javascript"></script>
