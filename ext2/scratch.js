@@ -60,8 +60,11 @@ success: function(result){pp=result;
 	tbone=$("#tablethingy tbody tr").length;
 	//loop through sky array (filtered values from ipbc report from ajax)
 for (u=1;u<air;u++)
-	// for each row, get value of claim number and store as cloud variable
-		{ cloud = sky[u][4].slice(7);
+	// for each row, get value of claim number and store as cloud variable from ajax to ipc report
+		{
+			//claim id from ajax:
+			cloud = sky[u][4].slice(7);
+			matches=0;
 		  //loop through table rows
 			for (t=0;t<tbone;t++)
 				 //if claim id is equal in sky array matches claim id in table, then...
@@ -85,12 +88,18 @@ for (u=1;u<air;u++)
 														//;
 														console.log("u: "+u+"t: "+t+"g: "+g+"goo: "+goo);
 														ded=new Date(goo);
-														if(ded.getMonth()<9){
+														dedd=ded.getDate();
+														dedm=ded.getMonth()+1;
+														dedy=ded.getFullYear();
+																											
+														if(dedm<10){
 															console.log("lt 9 ");
-														ded="0"+ded.toLocaleDateString();
+														dedm='0'+dedm;
 														console.log(ded+kayoo);}
-														else {ded=ded.toLocaleDateString();
-														console.log("gt 9:"+ded+kayoo);}
+														if(dedd<10){
+														 dedd='0'+dedd;
+														 }
+														 ded=dedm+"/"+dedd+"/"+dedy;
 														if (kayoo==ded)
 															{console.log("kayoo = ded");
 																$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","green");
@@ -99,10 +108,14 @@ for (u=1;u<air;u++)
 															}
 													}
 										}
-						
-						
+							//set matches indicator to 1, indicating that a match was found
+							matches=1;
 							  break
 							}
+					}
+					//after for loop through all rows of table, it no match is found, then add row with info
+					if(matches==0){
+						tab.row.add([]);
 					}
 		}
   
