@@ -59,54 +59,59 @@ success: function(result){pp=result;
 	//get length of rows of table and store in variable
 	tbone=$("#tablethingy tbody tr").length;
 	//loop through sky array (filtered values from ipbc report from ajax)
-for (u=1;u<air;u++)
+	for (u=1;u<air;u++)
 	// for each row, get value of claim number and store as cloud variable from ajax to ipc report
 		{
 			//claim id from ajax:
 			cloud = sky[u][4].slice(7);
 			matches=0;
-		  //loop through table rows
+			//loop through table rows
 			for (t=0;t<tbone;t++)
 				 //if claim id is equal in sky array matches claim id in table, then...
-					{ if($("tbody tr:eq("+t+") td.eliinclid").text()==cloud)
+					{ 
+					 if($("tbody tr:eq("+t+") td.eliinclid").text()==cloud)
 						   //set column value to claim id
 							{
-								console.log("matches");								
-								$("tbody tr:eq("+t+") td#total").text(cloud);
+							console.log("matches");								
+							$("tbody tr:eq("+t+") td#total").text(cloud);
 							    //loop through date column rows in table
 								for (g=9;g<12;g++)
 									//if date column has value, then... 
-										{ console.log("g"+g);
-										console.log($("tbody tr:eq("+t+") td:eq("+g+")").text());
+									{ 
+									console.log("g"+g);
+									console.log($("tbody tr:eq("+t+") td:eq("+g+")").text());
 											if($("tbody tr:eq("+t+") td:eq("+g+")").text().length>0)
-												
-													//set date value of this iteration of sky to kayoo variable
-													{ console.log("text>0");
-														kayoo=sky[u][6];
-														goo=$("tbody tr:eq("+t+") td:eq("+g+")").text().concat(" 00:00");
-														
-														//;
-														console.log("u: "+u+"t: "+t+"g: "+g+"goo: "+goo);
-														ded=new Date(goo);
-														dedd=ded.getDate();
-														dedm=ded.getMonth()+1;
-														dedy=ded.getFullYear();
+												//set date value of this iteration of sky to kayoo variable
+												{ console.log("text>0");
+												kayoo=sky[u][6];
+												goo=$("tbody tr:eq("+t+") td:eq("+g+")").text().concat(" 00:00");
+												//;
+												console.log("u: "+u+"t: "+t+"g: "+g+"goo: "+goo);
+												ded=new Date(goo);
+												dedd=ded.getDate();
+												dedm=ded.getMonth()+1;
+												dedy=ded.getFullYear();
 																											
-														if(dedm<10){
-															console.log("lt 9 ");
+													if(dedm<10)
+														{
+														console.log("lt 9 ");
 														dedm='0'+dedm;
-														console.log(ded+kayoo);}
-														if(dedd<10){
-														 dedd='0'+dedd;
-														 }
-														 ded=dedm+"/"+dedd+"/"+dedy;
-														if (kayoo==ded)
-															{console.log("kayoo = ded");
-																$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","green");
-															 $("tbody tr:eq("+t+") td:eq("+g+")").css("color","yellow");
+														console.log(ded+kayoo);
+														}
+														
+													if(dedd<10)
+														{
+														dedd='0'+dedd;
+														}
+												ded=dedm+"/"+dedd+"/"+dedy;
+													if (kayoo==ded)
+														{
+														console.log("kayoo = ded");
+														$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","green");
+														$("tbody tr:eq("+t+") td:eq("+g+")").css("color","yellow");
 																
-															}
-													}
+														}
+												}
 										}
 							//set matches indicator to 1, indicating that a match was found
 							matches=1;
@@ -114,9 +119,11 @@ for (u=1;u<air;u++)
 							}
 					}
 					//after for loop through all rows of table, it no match is found, then add row with info
-					if(matches==0){
-						tab.row.add([]);
-					}
+			if(matches==0)
+				{
+				console.log("no match: "+cloud+"u:" + u);
+				$("#tablethingy tbody").append("<tr><td>Missing</td><td>Missing</td><td>Missing</td><td>Missing</td><td>Missing</td><td>Missing</td><td><a href="+sky[u][5]+" target='_blank'>"+sky[u][4]+"</a></td><td>Missing</td><td>Missing</td><td>Missing</td><td style='background-color:red'>"+sky[u][4]+"</td><td>Missing</td></tr>");
+				}
 		}
   
   
