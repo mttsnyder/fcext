@@ -1027,7 +1027,7 @@ $("#threepac2").click(function() {
 				
 			}
 			
-			$("#irbccon").append("<button id='irbcbut2' style='margin-left:20px'>Load IRBC Report</button>");
+			$("#irbccon").append("<button id='irbcbut2' style=''>Compare EPR and IRBC</button>");
 			$("#wait").css("display","none");
          //onclick of irbc2 ajax button, run this function...
 	$("#irbcbut2").click(function(){
@@ -1166,7 +1166,7 @@ $("#threepac2").click(function() {
 													if (kayoo==ded)
 														{
 														console.log("kayoo = ded");
-														$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","green");
+														$("tbody tr:eq("+t+") td:eq("+g+")").css("background-color","#568c56");
 														$("tbody tr:eq("+t+") td:eq("+g+")").css("color","yellow");
 																
 														}
@@ -1183,7 +1183,7 @@ $("#threepac2").click(function() {
 					if(matches==0)
 					{
 					console.log("no match: "+cloud+"u:" + u);
-					$("#tablethingy tbody").append("<tr style='background-color:red; color:white'><td>"+sky[u][3]+"</td><td>"+sky[u][8]+"</td><td>"+sky[u][2]+"</td><td>"+sky[u][11]+"</td><td>Missing</td><td>Missing</td><td><a href="+sky[u][5]+" target='_blank'>"+sky[u][4]+"</a></td><td>"+sky[u][6]+"</td><td>Missing</td><td>Missing</td><td style='background-color:red'>"+sky[u][4]+"</td><td>Missing</td></tr>");
+					$("#tablethingy tbody").append("<tr style='background-color:#c74646; color:white'><td>"+sky[u][3]+"</td><td>"+sky[u][8]+"</td><td>"+sky[u][2]+"</td><td>"+sky[u][11]+"</td><td>Missing</td><td>Missing</td><td><a href="+sky[u][5]+" target='_blank'>"+sky[u][4]+"</a></td><td>"+sky[u][6]+"</td><td>Missing</td><td>Missing</td><td style='background-color:red'>"+sky[u][4]+"</td><td>Missing</td></tr>");
 					}
 				//end for loop through sky array items
 $("#wait").css("display","none");			

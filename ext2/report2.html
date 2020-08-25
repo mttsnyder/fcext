@@ -117,30 +117,41 @@
         .test {
           background-color: #e8faec;
         }
+		#irbccon {
+		  float: right;
+		  margin-right: 35px;
+		  border: 1px solid;
+		  padding: 25px;
+		  background-color:white;}
 
     </style>
 </head>
 <body>
+
 <div id="printthis" class="container2" style="margin-left:20px">
+<img src="FC.jpg">
     <div class="page-header">
-	
+		<div style='width:50%;float:left'>
         <h2 style='color:darkgreen'>Full Circle EPR Search Thingy</h2>
         <h4 id="date"></h4>
         <h4 id="name"></h4>
 		<h4 id='irc'><a href="https://secure.simplepractice.com/reports/pay-periods/build?includeInsurance=true" target="_blank">Income Received By Clinician Report - Current</a></h4>
 		<h4 id='irc2'><a href="https://secure.simplepractice.com/reports/pay-periods" target="_blank">Income Received By Clinician Report - Past</a></h4>
-        <button id="threepac2" style="margin-left:10%; font-size:15px;">Get Data from IRBC Report</button>
-		<div id='irbccon'><label for="cars">Choose an IRBC Report:</label>
+        <h4>"Date Recieved" link below opens the appointment report for all sessions for that client</h4></br>
+		</div>
+		<div id='irbccon'><button id="threepac2" style="font-size:15px;">Get Data from IRBC Report</button></br></br>
+		<label for="cars">Choose an IRBC Report:</label></br>
 
 				<select name="irbc" id="irbc">
 						 
-				</select></div>
-		<h4>"Date Recieved" link below opens the appointment report for all sessions for that client</h4>
-		<img src="FC.jpg">
+				</select></br></br>
+		</div>
+		
+		
     </div>
-
+<h1 id='wait' style='display:none'>Please Wait... Loading</h1></br>
     <div class="tab">
-	<h1 id='wait' style='display:none'>Please Wait... Loading</h1>
+	
         <table id="tablethingy"></table>
     </div>
 
