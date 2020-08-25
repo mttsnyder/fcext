@@ -807,7 +807,7 @@ $("#twopac2").click(function(){
 			//clear clsums
             $("#clsums").html('');
 			//create head object and set to DrP variable
-            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
+            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>IRBC Claim #</th><th>NPI</th></tr></thead>"};
 			//append head to table
             $("table").append(DrP.head);
 			//add body sent through with respopnse to body of table
