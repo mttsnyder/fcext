@@ -132,7 +132,7 @@ $("#magic").on('click',function(){
 				  }
 		
 			//append row div and data from puck to hidtable
-			$("#hidtable").append("<tr><td>"+cltag4+"</td><td>"+cltag3+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+cltag+"</td><td>"+cltag2+"</td><td class='inclhashid' style='display:none'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid' style='display:none'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td></tr>");
+			$("#hidtable").append("<tr><td>"+cltag4+"</td><td>"+cltag3+"</td><td>"+puck['payerName']+"</td><td>"+puck['totalAmountPaid']+"</td><td>"+puck['reportReferenceId']+"</td><td>"+cltag+"</td><td>"+cltag2+"</td><td class='inclhashid' style='display:none'>"+puck['insuranceClaimClientHashedId']+"</td><td class='eliinclid' style='display:none'>"+puck['eligibleInsuranceClaimId']+"</td><td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td><td id='total'></td><td id='npi'></td></tr>");
 		};	
 		//alert that data is ready for export
 	  alert("data ready for export");  

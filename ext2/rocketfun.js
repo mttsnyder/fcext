@@ -465,7 +465,6 @@ $("#twopac").click(function () {
 
               /*  to change name into initials
               for (i = 2; i < (tot - 3); i++) {
-
                     $(".left.col_client_name a")[i].innerHTML = $(".left.col_client_name a")[i].innerHTML.split(" ")[0].substr(0, 1) + $(".left.col_client_name a")[i].innerHTML.split(" ")[1].substr(0, 1);
                 } */
                 $("#sums").append("Number of Claims: " + tot + "<br/>");
@@ -782,7 +781,7 @@ $("#twopac").click(function () {
     }); //twopac function close
 
 //button click and function for electronic payments reports report/search thingamagigg
-$("#twopac2").click(function(){
+$("#twopac2").click(function() {
     //click button to start process
 	
 	$("#wait").css("display","block");
@@ -808,7 +807,7 @@ $("#twopac2").click(function(){
 			//clear clsums
             $("#clsums").html('');
 			//create head object and set to DrP variable
-            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Total Amount Billed</th><th>NPI</th></tr></thead>"};
+            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>IRBC Claim #</th><th>NPI</th></tr></thead>"};
 			//append head to table
             $("table").append(DrP.head);
 			//add body sent through with respopnse to body of table
@@ -888,8 +887,17 @@ $("#twopac2").click(function(){
 						  console.log("ajax complete, data gathered");
 						  //add result into hidden div
 						  $("#hiddiv3").append(result);
+						  len=0;
+						  for (m=0;m<6;m++)
+						  {  if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
+							  {break}
+						  else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
+						  {break}
+					      else
+							{len=len+1;}}
+						  
 						  //get keys for service line object and measure length as index
-						  len=Object.keys(gon.claim_params.claim.service_lines).length;
+						  //len=Object.keys(gon.claim_params.claim.service_lines).length;
 							//create for loop to loop through number of keys
 							dateone=0;
 							datetwo=0;
@@ -920,8 +928,8 @@ $("#twopac2").click(function(){
 									break;
 									case 4:
 									datetwo=datetwo+1;
-								datethree=datethree+1;
-								datefour=datefour+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
 									
 									break;
 									case 5:
@@ -938,15 +946,13 @@ $("#twopac2").click(function(){
 									datefive=datefive+1;
 									datesix=datesix+1;
 									break;
-								  default:
+									default:
 									datetwo=datetwo+1;
 									datethree=datethree+1;
 									datefour=datefour+1;
 									datefive=datefive+1;
 									datesix=datesix+1;
 							}
-							
-					
 							 //access gon variable for this line of the services
 							 ggg=gon.claim_params.claim.service_lines[j];
 							 //create variable shifted from index to match data class
@@ -969,13 +975,13 @@ $("#twopac2").click(function(){
 			  }
 			  //loop through date columns and hide if empty
 			  if (datefive>0) 
-			  {tab.column(13).visible(false);
+			  {tab.column(14).visible(false);
 			  }
 			  if (datefour>0) 
-			 {tab.column(12).visible(false);
+			 {tab.column(13).visible(false);
 			 }
 			  if (datethree>0) 
-		     {tab.column(11).visible(false);
+		     {tab.column(12).visible(false);
 			 }
 			//  if (datethree>0) 
 			//  {
@@ -988,4 +994,193 @@ $("#twopac2").click(function(){
 	//chrome query function end		
     }); 
 //end twopac2 button click function
+});
+
+
+//function for when threepac2 button is clicked
+$("#threepac2").click(function() {
+	//when button is clicked, display loading message...
+	$("#wait").css("display","block");
+	//make ajax call
+		$.ajax({url: "https://secure.simplepractice.com/frontend/pay-periods?page%5Bsize%5D=50", 
+		//on success of ajax call, then do execute this function
+		success: function(result){
+			//set result to qq variable
+			qq=result;
+			//get length of qq variable and set to lennn
+			lennn=qq.data.length;
+			//loop through qq
+			for (n=0;n<lennn;n++)
+				{
+				//set row of data n, id to stid
+				stid = qq.data[n].id;
+				//set starts at attr of row to star
+				star = qq.data[n].attributes.startsAt;
+				//translate star into date object and store as stard
+				stard = new Date(star);
+				//format date and store as stardd
+				stardd = stard.toLocaleDateString();
+				//get ending date and store in Enn
+				Enn= qq.data[n].attributes.endsAt;
+				//create new date object from end date
+				Ennd = new Date(Enn);
+				//formate date and store in Enndd
+				Enndd = Ennd.toLocaleDateString();
+				//add date option into select option field
+				$("#irbc").append("<option value='"+stid+"'>"+stardd+" - "+Enndd+"</option>");
+				//end for loop for qq date set
+				}
+			//append button irbcbut2 to irbccon
+			$("#irbccon").append("<button id='irbcbut2' style=''>Compare EPR and IRBC</button>");
+			//hide loading message
+			$("#wait").css("display","none");
+			 //onclick of irbc2 ajax button, run this function...
+			$("#irbcbut2").click(function(){
+			//display loading field	
+				$("#wait").css("display","block");
+				//add hidden table to body to store ajax data
+				$("body").append("<div style='display:none'><table id='ltab'></table></div>")
+				//run ajax to get dates from irbc reports
+				$.ajax({url: "https://secure.simplepractice.com/frontend/pay-periods/"+$("#irbc").val()+"/download", 
+				  //on success, run this function...
+				  success: function(result){
+				  //store result in pp variable and log onto console
+				  pp=result;
+				  //split pp text string (csv) by new line character and store as hhh...
+				  hhh=pp.split(/\r|\n/);
+				  //store length of hhh array in ggg variable
+				  gog=hhh.length;
+				  //create two arrays, redder and joj
+				  redder = [];
+				  joj=[];
+				  //loop through all items of array
+				  for (v=0;v<gog;v++)
+				  {
+					  //if hhh array item includes quotations, format...
+					  if (hhh[v].includes('"'))
+						  {
+						  //split hhh item at comma, store in bowl variable
+						  bowl=hhh[v].split(",");
+						  //create and store in redder array a new array line item with each line from csv and formatted text
+						  redder[v]=[bowl[0],bowl[3],bowl[4],bowl[5],bowl[6],bowl[7],bowl[8],bowl[9],bowl[10],bowl[11],bowl[12],bowl[13]];		  
+							//end if condition function
+						   }
+					  //if hhh array item does not contain quotations, then...
+					  else
+						   {
+							//split and store in array
+							bowl=hhh[v].split(",");
+							redder[v]=[bowl[0],bowl[1],bowl[2],bowl[3],bowl[4],bowl[5],bowl[6],bowl[7],bowl[8],bowl[9],bowl[10],bowl[11]];
+							//end else condition functino
+							}
+				  //end for loop and have new array of organized data
+				  }
+				  //create index variable d, set to 0
+				  d=0;
+				  //create for loop through new array
+				  for(y=0;y<redder.length;y++)
+					{
+					  //if this line in redder array is a client payment, exclude
+					  if(redder[y][1]=="Client payment")
+						{
+						}
+					  //if this line of array doesn't contain client payment, then...
+					  else
+						{
+						 //set line in joj array to current line in redder array
+						 joj[d]=redder[y];
+						 //advance index variable by 1	
+						 d=d+1;
+						 //end else condition function
+						} 
+					//end for loop through redder array and have new filtered array joj
+					}
+					//set person variable to name of data from other page
+					person=$("#name").text().trim();
+					//create index variable e and set to 1 (to skip header line in array)  
+					e=1;
+					//create sky array
+					sky=[];
+					//set header row of joj array equal to sky array
+					sky[0]=joj[0];
+					//loop through joj array and filter to name of therapist only
+					for(x=0;x<joj.length;x++)
+					  {
+					  //if array item line includes person name, set equal to row in sky array	  
+					  if(joj[x][0].includes(person))
+						{
+						sky[e]=joj[x];
+						//advance index variable
+						e=e+1;
+						}
+						//if it doesn't include therapist name, exclude
+						else
+						{}
+					   //end for loop through joj array
+					   }
+						//get length variable of sky array, which holds filtered records from ajax call from ipbc report
+						air=sky.length;  
+						//get length of rows of table and store in variable
+						tbone=$("#tablethingy tbody tr").length;
+						//loop through sky array (filtered values from ipbc report from ajax)
+						for (u=1;u<air;u++)
+						// for each row, get value of claim number and store as cloud variable from ajax to ipc report
+							{
+							//claim id from ajax:
+							cloud = sky[u][4].slice(7);
+							//create match variable and set to 0
+							matches=0;
+								//loop through table rows
+								for (t=0;t<tbone;t++)
+								//if claim id is equal in sky array matches claim id in table, then...
+									{ 
+									if($("tbody tr:eq("+t+") td.eliinclid").text()==cloud)
+									//set column value to claim id
+									{	
+										tre=$('tbody tr:eq('+t+')');
+									tab.row(tre).child( '<tr>'+
+									'<td>'+sky[u][3]+'</td>'+
+									'<td>'+sky[u][8]+'</td>'+
+									'<td>'+sky[u][2]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+'blank'+'</td>'+
+									'<td>'+'blank'+'</td>'+
+									'<td>'+sky[u][10]+'</td>'+
+									'<td>'+sky[u][6]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'<td>'+sky[u][11]+'</td>'+
+									'</tr>').show();
+									//$("tbody tr:eq("+t+") td#total").text(cloud);
+										//loop through date column rows in table
+										
+									//set matches indicator to 1, indicating that a match was found
+									
+									}
+									//end for loop through table rows
+									}
+							//after for loop through all rows of table, it no match is found, then add row with info
+							
+						//end for loop through sky array items
+					//hide loading field
+					$("#wait").css("display","none");			
+					}
+						//end ajax success function
+					}
+					  //end ajax call
+					});
+						
+		//end click irbcbut button function	
+	});
+	//end ajas success function
+	}
+		 //end ajax call
+		 });
+//end threepac2 cluck button function	
 });
