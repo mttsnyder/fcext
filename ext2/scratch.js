@@ -207,3 +207,13 @@ else
 		
 	//end for loop
 	}
+	
+	
+	
+	
+	
+	
+	
+	*** version 3 scratch
+	
+	https://secure.simplepractice.com/frontend/reports/insurance_payment_reports?filter%5BstartsAt%5D=2020-08-20&filter%5BendsAt%5D=2020-08-26&filter%5BclinicianId%5D=84638
