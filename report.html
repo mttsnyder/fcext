@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>FC Ins Report</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet" **media="screen"** type="text/css">
+    <script src="jquery.min.js"></script>
+	<script type="text/javascript" src="moment.min.js"></script>
+	<script type="text/javascript" src="daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css">
+	<script type="text/javascript" src="dataTables.js"></script>
+	<link rel="stylesheet" type="text/css" src="dataTables.css">
+	<link href="css/bootstrap.min.css" rel="stylesheet" **media="screen"** type="text/css">
 
     <style>
         @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
@@ -124,10 +130,45 @@
         <h4 id="date"></h4>
         <h4 id="name"></h4>
         <img src="FC.jpg">
+		<label>Date Range of Sessions:</label>
+				<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /></br></br><label>Clinician</label>
+				<select id='prac'></select></br></br>
+				
     </div>
 
     <div class="tab">
-        <table id="tablethingy"></table>
+        <table id="tablethingy">
+				<thead>
+				<tr>
+					<th colspan="7">Appointment</th>
+					<th colspan="5">Client Responsibility</th>
+					<th colspan="4">Insurance Responsibility</th>
+					</tr>
+					
+					<tr>
+					<th>Date of Service</th>
+					<th>Client</th>
+					<th>Clinician</th>
+					<th>Billing Code</th>
+					<th>Rate per Unit</th>
+					<th>Units</th>
+					<th>Total Fee</th>
+					<th>Status</th>
+					<th>Charge</th>
+					<th>Uninvoiced</th>
+					<th>Paid</th>
+					<th>Unpaid</th>
+					<th>Status</th>
+					<th>Charge</th>
+					<th>Ins. Paid</th>
+					<th>Unpaid</th>
+					</tr>
+					</tr>
+				</thead>
+				
+				<tbody>
+				</tbody>
+		</table>
     </div>
 
 
@@ -154,7 +195,7 @@
         <button id="twelvepac" style="margin-left:10%; font-size:15px;">Ins Unpaid</button>
         <button id="thirteenpac" style="margin-left:10%; font-size:15px;">Audit Report</button>
 
-<script src="jquery.min.js" type="text/javascript"></script>
+
 <script src="extension.js" type="text/javascript"></script>
 <script src="rocketfun.js" type="text/javascript"></script>
 

@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>FC EPR Search Thingy</title>
-	
-	
-	
+		
 	<script src="jquery.min.js"></script>
-	
 	<script type="text/javascript" src="moment.min.js"></script>
 	<script type="text/javascript" src="daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css">
 	<script type="text/javascript" src="dataTables.js"></script>
 	<link rel="stylesheet" type="text/css" src="dataTables.css">
+	
 	<style>
-	    #irbccon {
+	    #irbccona {
 		  float: right;
 		  margin-right: 35px;
 		  border: 1px solid;
@@ -28,42 +26,43 @@
 		tr.shown td.details-control {
 			background: url('details_close.png') no-repeat center center;
 		}
+		.toggle-vis{
+		color: #3174c7}
     </style>
 </head>
 <body>
 
-
-<div id="printthis" class="container2" style="margin-left:20px">
-<img src="FC.jpg">
+<div id="printthis" class="" style="margin-left:20px">
+	<img src="FC.jpg" style='width:50px'>
     <div class="page-header">
-		<div style='width:50%;float:left;font-family:Metallophile Sp8 Light;'>
-        <h2 style='color:darkgreen'>Full Circle EPR Search Thingy</h2>
-        <h4 id="date"></h4>
-        <h4 id="name"></h4>
-		<h4 id='irc'><a href="https://secure.simplepractice.com/reports/pay-periods/build?includeInsurance=true" target="_blank">Income Received By Clinician Report - Current</a></h4>
-		<h4 id='irc2'><a href="https://secure.simplepractice.com/reports/pay-periods" target="_blank">Income Received By Clinician Report - Past</a></h4>
-        <h4>"Date Recieved" link below opens the appointment report for all sessions for that client</h4></br>
+		<div id='sec1' style='width:50%;font-family:Metallophile Sp8 Light; float:left;'>
+				<h2 style='color:darkgreen'>Full Circle EPR Search Thingy</h2>
+				<h4 id='irc'><a href="https://secure.simplepractice.com/reports/pay-periods/build?includeInsurance=true" target="_blank">Income Received By Clinician Report - Current</a></h4>
+				<h4 id='irc2'><a href="https://secure.simplepractice.com/reports/pay-periods" target="_blank">Income Received By Clinician Report - Past</a></h4>
+				<h4>"Date Recieved" link below opens the appointment report for all sessions for that client</h4>
+				<label>Date Range of Sessions:</label>
+				<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /></br></br><label>Clinician</label>
+		<select id='prac'></select></br></br>
+				<button id="twopac2" style="font-size:15px;">Gather Data from the Fields</button>				
 		</div>
-		<div id='irbccon'><button id="threepac2" style="font-size:15px;">Get Data from IRBC Report</button></br></br>
-		<label for="cars">Choose an IRBC Report:</label></br>
-
-				<select name="irbc" id="irbc">
-						 
-				</select></br></br>
-		</div>
-		
-		
+		<div id='irbccon'>
+				<button id="threepac2" style="font-size:15px;">Get Data from IRBC Report</button></br></br>
+				<label for="cars">Choose an IRBC Report:</label></br>
+				<select name="irbc" id="irbc"></select></br></br>
+		</div>	
     </div>
 	
-
-	<label>Clinician</label></br>
-	<select id='prac'>
-			
-		</select></br>
-		<button id="twopac2" style="margin-left:10%; font-size:15px;">Gather Data from the Fields</button>
+	<div id='pageheader2'>
+		<div id='waitdivs' style=''>
+     	
+</div>
 		
-	
-<h1 id='wait' style='display:none'>Please Wait... Loading</h1></br>
+		
+	</div>
+					<div id='togdiv' style='margin-top:15px; margin-bottom:15px' >
+		Toggle column: <a class="toggle-vis" data-column="5">Clearinghouse Ref #</a> - <a class="toggle-vis" data-column="6">Payer Claim #</a> - <a class="toggle-vis" data-column="7">Payment Ref #</a> - <a class="toggle-vis" data-column="8">ID #</a> - <a class="toggle-vis" data-column="9">Client Hashed</a> - <a class="toggle-vis" data-column="10">Claim Deleted</a> - <a class="toggle-vis" data-column="11">Eligible Ins Claim #</a> - <a class="toggle-vis" data-column="12">Ins Payment #</a> - <a class="toggle-vis" data-column="13">Ins. Claim Client Hashed</a> - <a class="toggle-vis" data-column="14">Date1</a> 
+		</div>
+
     <div class="tab">
 	
         <table id="tablethingy">
@@ -133,12 +132,8 @@
 				</thead>
 				<tbody>
 				</tbody>
-		</table>
-		
-		
+		</table>	
     </div>
-
-
     <div id="cont">
         <div id="clsums" class="second"></div>
     </div>
@@ -147,17 +142,6 @@
 </br>
 <h2 id='totalp'>Total Paid: </h2>
 <div id="notesdiv" contenteditable="true">Notes:</div>
-
-        </br>
-		
-		
-
-     	<label>Date Range of Sessions:</label>
-	<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
-
-		
-<!-- <script src="extension.js" type="text/javascript"></script> -->
 <script src="rocketfun.js" type="text/javascript"></script>
-
 </body>
 </html>
