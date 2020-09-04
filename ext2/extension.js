@@ -4,6 +4,7 @@ $("table").css("font-size","13px");
 chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {a=tabs[0];
          //send message to first tab of litmus, on success run function and pass it response from tab
     chrome.tabs.sendMessage(a.id, {greeting: "litmus"}, function(response) {
+		console.log('litmus');
          //set response to loc variable
         loc=response;
          //log this variable to console of extension

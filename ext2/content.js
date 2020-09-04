@@ -5,37 +5,8 @@
             function(request, sender, sendResponse) {
                 //if greeing part of request is litmus, then....
                 if (request.greeting == "litmus")
-                  {
-                    //if magic button exists, log on console that it exists and exit
-                    if($("#magic").length>0)
-                    {console.log('magic button exists')}
-                    //if magic button does not exist, log on console, then create it and exit
-                    else 
-					{console.log('magic button does not exist, creating it');
-                    $(".page-header").append("<button id='magic' class='magic' style='margin-right:300px'>button</button>");}
-
-					if ($("#injectscr").length>0)
-						{console.log("script exists in DOM");}
-					else
-					    {
-						//create function to inject script, pass parameters of path of script and tag to append to
-							function injectScript(file_path, tag) {
-							//get element defined by tag passed in, set to node variable
-							var node = document.getElementsByTagName(tag)[0];
-							//create element of script type and assign to script variable
-							var script = document.createElement('script');
-							//set type prop of script element
-							script.setAttribute('type', 'text/javascript');
-							//set src prop of script element
-							script.setAttribute('src', file_path);
-							script.setAttribute('id', 'injectscr');
-							//add script element to tag passed in
-							node.appendChild(script);
-							 };
-						//run inject script function inject.js into body
-						injectScript(chrome.extension.getURL('inject.js'), 'body');
-						console.log("script doesnt exist in DOM, now injected");
-						}
+                  {  console.log('litmus');
+					  
 						//log to console that litmus message was sent
                      console.log("greet this:litmus");
                         //get window location, assign to resp1 variable

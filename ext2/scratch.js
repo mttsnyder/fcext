@@ -216,16 +216,171 @@ else
 	
 	*** version 3 scratch
 	
-	$.ajax({url:'https://secure.simplepractice.com/frontend/reports/insurance_payment_reports?filter%5BstartsAt%5D=2020-08-20&filter%5BendsAt%5D=2020-08-26&filter%5BclinicianId%5D=84638', success: function (data) {
-		  eprrec=data;
-		  ground=eprrec.split(/\r|\n/);
-		  
+	$.ajax({url:'https://secure.simplepractice.com/frontend/reports/insurance_payment_reports?filter%5BstartsAt%5D=2020-08-20&filter%5BendsAt%5D=2020-08-26&filter%5BclinicianId%5D=84638',
+	headers: {
+'accept': 'application/vnd.api+json'
+},
+async: false,
+success: function (data) {
+	dd=data;
+		  ep=dd.data.attributes.rows;
 		  grndln=ground.length;
-		  field=[];
 		  for(k=0;k<grndln;k++)
 		  {
-			  swmp=ground[k].split(",");
-			  field[k]=swmp;
-		  }
-	 
-	}})
+			$("#tablethingy tbody").append("<tr><td>"+ep[k]['createdAt']+"</td><td>"+ep[k]['clientName']+"</td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td>"+ep[k]['reportReferenceId']+"</td><td>"+ep[k]['controlNumber']+"</td><td>"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td></tr>");
+					  					  
+				  }
+                  
+              }})
+			  
+			  
+			  ///////
+			  
+			  
+			  
+			   //add hiddiv3 to body
+			 $("body").append("<div id='hiddiv3' style='display:none'></div>");
+			 //ajax call for date data
+			 tlen=tab.rows()[0].length;
+			 //get number of rows in the body of the table
+			 //create for loop through rows of table
+			  for (d=0;d<tlen;d++){
+						  //get value of insurance hash id in this row and save in hid variable
+						  hid=tab.row(d).data()[9];
+						  //get value of eligible claim id in this row and save to elid variable
+						  elid=tab.row(d).data()[11];
+						  console.log(d+hid+elid);
+						  //build the url from these variables related to this row
+						  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
+						  //if either hid or elid are null, then skiparoo
+				  if (hid=="null"||elid== "null")
+				  {}
+			      //if both hid and elid are not null, then function it up
+			      else {
+					  if (hid=="blank"||elid=="blank"){}
+					  else{
+					  //run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
+				  $.ajax({url: urltmp, 
+						  //have to do it synchronously because of for loop which runs independent of ajax calls
+					      async: false,
+						  //on success of call, run this function, passing result
+						  success: function(result){
+							  
+							  aresult=$(result).filter('script')[5];
+						  //log into console that it is complete
+						  console.log("ajax complete, data gathered");
+						  //add result into hidden div
+						  $("#hiddiv3").append(aresult);
+						  len=0;
+						  for (m=0;m<6;m++)
+						    {  
+							   if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
+									{
+									console.log('undef break'); 
+									}
+							   else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
+									{console.log('length 0');
+									}
+							   else
+									{len=len+1;
+									console.log('gon exists');
+									}
+							}
+			    //end success function
+				}
+			  //end ajax function
+			  });
+						//end else option
+						}
+					//end else option
+					}
+					//end for loop
+					}; 
+						  
+						  //get keys for service line object and measure length as index
+						  //len=Object.keys(gon.claim_params.claim.service_lines).length;
+							//create for loop to loop through number of keys
+							/*dateone=0;
+							datetwo=0;
+							datethree=0;
+							datefour=0;
+							datefive=0;
+							datesix=0;							
+							
+							for (j=0;j<len;j++)
+							{
+								//when looping, depending on value of j, iterate count variables
+								 switch(j) {
+								  
+								  //when j is 1, meaning that there is one column with a value
+								  case 1:
+								  //add one to each of two through six
+									
+									
+									break;
+								  case 2:
+									datetwo=datetwo+1;
+									
+								break;
+									case 3:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									
+									break;
+									case 4:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									
+									break;
+									case 5:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									
+									break;
+									case 6:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+									break;
+									default:
+									datetwo=datetwo+1;
+									datethree=datethree+1;
+									datefour=datefour+1;
+									datefive=datefive+1;
+									datesix=datesix+1;
+							} 
+							 //access gon variable for this line of the services
+							 ggg=gon.claim_params.claim.service_lines[j];
+							 //create variable shifted from index to match data class
+							 jj=j+1;
+							 //enter date into table cell on this row
+							 //$("tbody tr:eq("+d+") #date"+jj).text(ggg.service_date_from);
+							 //log onto console ggg variable
+							 console.log(ggg);
+							 //end for loop for object keys length (service dates)
+							} */
+						
+						
+						
+						
+						/////
+						
+						
+				urltmpa="https://secure.simplepractice.com/frontend/reports/appointments?filter%5BstartsAt%5D=2020-08-12&filter%5BendsAt%5D=2020-09-03&filter%5BincludeInsurance%5D=true&filter%5BclinicianId%5D=84638"
+						
+						  //run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
+				  $.ajax({url: urltmpa, headers: {
+							'accept': 'application/vnd.api+json'
+								},
+						  //have to do it synchronously because of for loop which runs independent of ajax calls
+					      async: false,
+						  //on success of call, run this function, passing result
+						  success: function(result){	
+				  hgh=result;}});
+						
+						

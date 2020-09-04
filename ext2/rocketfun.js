@@ -1,7 +1,135 @@
 //brings data from simple practice page into new page
 //this runs in the new report page
-$("#twopac").click(function () {
+
+//if window is report.html...
+if (window.location.href.includes('report.html'))
+{
+	//run ajax to get practitioner names...
+	$.ajax({url: "https://secure.simplepractice.com/reports/insurance-payment-reports?clinicianId=84638&endsAt=2020-08-31&startsAt=2020-08-25", 
+		//on success of ajax call, then do execute this function
+		success: function(response)
+		//filter response to get script and store in variable clnames
+		{clnames=$(response).filter("script");
+		//create hidden div and attach to body
+			$("body").append("<div id='hdiv' style='display:none'></div>");
+			//paste script in hidden div to activate
+			$("#hdiv").html(clnames[6]);
+			//gather practitioner name data 
+			prnm = window.currentUser.included;
+			//get length of response array
+			prnml=prnm.length;
+			//loop through response array
+			for (j=0;j<prnml;j++)
+			{
+				//if data type is teamMembers, then..
+				if(prnm[j].type=="teamMembers")
+				{//get clinician id and store in clinid variable
+					clinid=prnm[j].id;
+					//get first and last name
+					fclnam=prnm[j].attributes.firstName;
+					lclnam=prnm[j].attributes.lastName;
+					//build option and append to select
+				    $("#prac").append("<option value="+clinid+">"+fclnam+" "+lclnam+"</option>");
+				//end if
+				}
+			//end for loop through prnml array
+			}
+		//end ajax success function 
+		}
+		//end ajax to get practitioner names
+		}); 			
+			
+//function to add dats to date			
+function addDays(date, days) {
+	//create new date object
+		var result = new Date(date);
+		//set new date as day of date plus passed days
+		result.setDate(result.getDate() + days);
+		//return result
+		return result;
+		}
+       //create new date object
+	  nd = new Date();
+	  //break it up by extracting day month year
+	  st= nd.getMonth()+1+"/"+nd.getDate()+"/"+nd.getFullYear();
+	  //add 14 days to date and store as en var
+	  en=addDays(st, 14);
+	  //create date range and activate on input in hmtl
+ $('input[name="daterange"]').daterangepicker({
+    
+    "alwaysShowCalendars": true,
+    "startDate": "08/26/2020",
+    "endDate": "09/01/2020",
+	 "opens": "left"
+}, function(start, end, label) {
+  console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+});
+
+//segment to add click event listener to td in table
+ $('#tablethingy tbody').on('click', 'td.details-control', function () {
+			  console.log("clicked");
+				 tr = $(this).closest('tr');
+				 row = tab.row( tr );
+				 console.log(tr);
+				 console.log(row.child.isShown());
+				if (row.child.isShown() ) {
+					console.log("shown");
+					// This row is already open - close it
+					row.child.hide();
+					tr.removeClass('shown');
+					console.log("class removed");
+					}
+				else {
+					// Open this row
+					console.log("not shown");
+					row.child.show();
+					tr.addClass('shown');
+					console.log("class added");
+					}
+					});
+
+	
+
+$("#twopac").on("click", function () {
   //click button to start process
+  
+  dr=$("input").val();
+	er=dr.split(" - ");
+	ser = er[0].split("/");
+	eer = er[1].split("/");
+	
+	sta = ser[2]+"-"+ser[0]+"-"+ser[1];
+	ena = eer[2]+"-"+eer[0]+"-"+eer[1];
+	pprac=$("#prac").val();
+				//build url from date range from date range selector and clinician id
+				urltmpa="https://secure.simplepractice.com/frontend/reports/appointments?filter%5BstartsAt%5D="+sta+"&filter%5BendsAt%5D="+ena+"&filter%5BincludeInsurance%5D=true&filter%5BclinicianId%5D="+pprac;
+						
+						  //run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
+	            $.ajax({url: urltmpa, 
+					//accept data in this form
+					headers: {
+							'accept': 'application/vnd.api+json'
+								},
+						  //have to do it synchronously because of for loop which runs independent of ajax calls
+					      async: false,
+						  //on success of call, run this function, passing result
+						  success: function(result){	
+								hgh=result.data.attributes.rows;
+								lll=hgh.length;
+							
+							for (a=0;a<lll;a++){
+								
+								urltmpb = "https://secure.simplepractice.com/calendar/appointments/"+hgh[a]['id'];
+								$("#tablethingy tbody").append("<tr><td><a target='_blank' href=urltmpb >"+hgh[a]['startTime']+"</a></td><td>"+hgh[a]['clientName']+"</td><td>"+hgh[a]['clinicianName']+"</td><td>"+hgh[a]['cptCodes'][0]+"</td><td>"+hgh[a]['ratesForAppointment'][0]+"</td><td>"+hgh[a]['unitsForAppointment'][0]+"</td><td>"+hgh[a]['fee']+"</td><td>"+hgh[a]['clientPaidStatus']+"</td><td>"+hgh[a]['clientCharge']+"</td><td>"+hgh[a]['uninvoicedFee']+"</td><td>"+hgh[a]['clientPaid']+"</td><td>"+hgh[a]['balance']+"</td><td>"+hgh[a]['insurancePaidStatus']+"</td><td>"+hgh[a]['insuranceCharge']+"</td><td>"+hgh[a]['insuranceAmountPaid']+"</td><td>"+hgh[a]['insuranceBalance']+"</td></tr>")
+							// end for loop through rows of data array from sessions ajax call
+							}
+							//initialize data table
+							tab=$("#tablethingy").DataTable({paging:false});
+						// end ajax success function	
+						}
+						//end ajax call to get data for appointments
+						});
+						
   //send query to url and get id of simp prac browser window
     chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function (tabs) {
       //set id of main window to rocketman
@@ -14,33 +142,13 @@ $("#twopac").click(function () {
         chrome.tabs.sendMessage(rocketman, {greeting: "newrep"}, function (response) {
            //CREATE TABLE 
 				//set response to variable package2
-				package2 = response;
-				//log onto console content of package2 variable to show it happened
-				console.log("second step"+package2);
-				//series of functions to set div's that are created on base html page to clear
-				$("#tablethingy").html('');
-				$("#date").html('');
-				$("#name").html('');
+				
+				
 				$("#clsums").html('');
 				// create head for table and set equal to variable DrP
-				DrP = {head:"<thead><tr><th colspan='7'>Appointment</th><th colspan='5'>Client Responsibility</th><th colspan='4'>Insurance Responsibility</th></tr></br><tr><th> Date of Service </th><th>Client</th><th>Clinician</th><th>Billing Code</th><th>Rate per Unit</th><th>Units</th><th style='border-right: 1px solid #111366;'>Total Fee</th><th>Status</th><th>Charge</th><th>Uninvoiced</th><th>Paid</th><th style='border-right: 1px solid #111366;'>Unpaid</th><th>Status</th><th>Charge</th><th>Insurance Paid</th><th>Unpaid</th></tr></thead>"};
-				//add head to table
-				$("table").append(DrP.head);
-				//append 'body' value from package2 object to table with id tablethingy
-				$("#tablethingy").append(package2["body"]);
-				//append 'date' value from package2 object to date div
-				$("#date").append(package2["date"]);
-				  //append 'name' value from package2 object to name div
-				$("#name").append(package2["name"]);
-				//set head position to relative
-				$("thead").css('position','relative');
+				
 				//loop through head cells and set position to static
-				for (i=0;i<19;i++)
-				{$("th:eq("+i+")").css("position","static")};
-            //here is where we need to put in gates for different reporting option
-            
-			//change any credits to negative number
-			
+				
 			
 			//VARIABLES FOR CALCULTIONS
 			//for the session report page
@@ -780,227 +888,247 @@ $("#twopac").click(function () {
         });
     }); //twopac function close
 
-//button click and function for electronic payments reports report/search thingamagigg
-$("#twopac2").click(function() {
-    //click button to start process
-	
-	$("#wait").css("display","block");
-    //send query to url and get id of simp prac browser window
-    chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function (tabs) {
-        //set id of main window to rocketman
-        rocketman = tabs[0].id;
-        //log onto console to show this step has occurrred
-        console.log("first step"+rocketman);
-        //send message to the simple practice window
-        //message is 'greeting:newrep2', when window sends back response, filter response into function and run function
-        chrome.tabs.sendMessage(rocketman, {greeting: "newrep2"}, function (response) {
-            //set response to package2 variable
-			package2 = response;
-            //log message to console that package has been set
-			console.log("second step"+package2);
-            //clear tablethingy
-			$("#tablethingy").html('');
-            //clear date
-			$("#date").html('');
-			//clear name
-            $("#name").html('');
-			//clear clsums
-            $("#clsums").html('');
-			//create head object and set to DrP variable
-            DrP = {head:"<thead><tr><th> Date Received </th><th>Client</th><th>Payer</th><th>Paid</th><th>Clearinghouse Ref#</th><th>Payer Claim #</th><th>Payment Reference #</th><th style='display:none'>Claim Hash Id#</th><th style='display:none'>Elig Ins Claim Id#</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>Date of Service</th><th>IRBC Claim #</th><th>NPI</th></tr></thead>"};
-			//append head to table
-            $("table").append(DrP.head);
-			//add body sent through with respopnse to body of table
-            $("#tablethingy").append(package2["body"]);
-			//add date of response to date  div
-            $("#date").append(package2["date"]);
-			//add name of response to name div
-            $("#name").append(package2["name"]);
-			//set thead position to relative
-            $("thead").css('position','relative');
-			//excute datatable on tablethingy table
-            tab=$("#tablethingy").DataTable({paging:false});
-			//get number of rows in table and set to nrl variable
-            nrl=$("#tablethingy tbody tr").length;
-			//create totalpay variable
-            totalpay=0;
-			//loop through rows in table
-				  for (i=0; i<nrl; i++)
-					  //for each row, get numerical value of payment
-				  {hunger=parseFloat($("#tablethingy tbody tr:eq("+i+") td")[3].innerHTML.substr(1));
-					//if it is not a number, skip
-					if(isNaN(hunger))
-						{}
-				    //if it is a number, add to total
-					else{
-						   unitt=parseFloat($("#tablethingy tbody tr:eq("+i+") td")[3].innerHTML.substr(1));
-						   totalpay=totalpay+unitt;
-						}
-				  }	
-			  //fix decimals to 2 for totalpay variable
-             totalpay=totalpay.toFixed(2);
-			 //add total pay value to clsums div
-             $("#totalp").html("Total Paid: "+totalpay);
-			 tab.on('draw', function () {
-				 nlen=$("tbody tr").length;
-				 totalpay=0;
-				 for(k=0;k<nlen;k++)
-				 {
-					 hunger=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
-					 if(isNaN(hunger))
-						{}
-				    //if it is a number, add to total
-					else{
-						   unitt=parseFloat($("#tablethingy tbody tr:eq("+k+") td")[3].innerHTML.substr(1));
-						   totalpay=totalpay+unitt;
-						}
-				 }
-				 totalpay=totalpay.toFixed(2);
-				  $("#totalp").html("Total Paid: "+totalpay);
-				 console.log('search');
-				 });
-			 //add hiddiv3 to body
-			 $("body").append("<div id='hiddiv3' style='display:none'></div>");
-			 //ajax call for date data
-			 tlen=$("table tbody tr").length;
-			 //get number of rows in the body of the table
-			 //create for loop through rows of table
-			  for (d=0;d<tlen;d++){
-				  //get value of insurance hash id in this row and save in hid variable
-				  hid=$(".inclhashid:eq("+d+")").text();
-                  //get value of eligible claim id in this row and save to elid variable
-				  elid=$(".eliinclid:eq("+d+")").text();
-				  //build the url from these variables related to this row
-				  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
-				  //if either hid or elid are null, then skiparoo
-				  if (hid=="null"||elid== "null")
-				  {}
-			      //if both hid and elid are not null, then function it up
-			      else {
-					  //run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
-				  $.ajax({url: urltmp, 
-						  //have to do it synchronously because of for loop which runs independent of ajax calls
-					      async: false,
-						  //on success of call, run this function, passing result
-						  success: function(result){
-						  //log into console that it is complete
-						  console.log("ajax complete, data gathered");
-						  //add result into hidden div
-						  $("#hiddiv3").append(result);
-						  len=0;
-						  for (m=0;m<6;m++)
-						  {  if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
-							  {break}
-						  else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
-						  {break}
-					      else
-							{len=len+1;}}
-						  
-						  //get keys for service line object and measure length as index
-						  //len=Object.keys(gon.claim_params.claim.service_lines).length;
-							//create for loop to loop through number of keys
-							dateone=0;
-							datetwo=0;
-							datethree=0;
-							datefour=0;
-							datefive=0;
-							datesix=0;							
-							
-							for (j=0;j<len;j++)
-							{
-								//when looping, depending on value of j, iterate count variables
-								switch(j) {
-								  
-								  //when j is 1, meaning that there is one column with a value
-								  case 1:
-								  //add one to each of two through six
-									
-									
-									break;
-								  case 2:
-									datetwo=datetwo+1;
-									
-								break;
-									case 3:
-									datetwo=datetwo+1;
-									datethree=datethree+1;
-									
-									break;
-									case 4:
-									datetwo=datetwo+1;
-									datethree=datethree+1;
-									datefour=datefour+1;
-									
-									break;
-									case 5:
-									datetwo=datetwo+1;
-									datethree=datethree+1;
-									datefour=datefour+1;
-									datefive=datefive+1;
-									
-									break;
-									case 6:
-									datetwo=datetwo+1;
-									datethree=datethree+1;
-									datefour=datefour+1;
-									datefive=datefive+1;
-									datesix=datesix+1;
-									break;
-									default:
-									datetwo=datetwo+1;
-									datethree=datethree+1;
-									datefour=datefour+1;
-									datefive=datefive+1;
-									datesix=datesix+1;
-							}
-							 //access gon variable for this line of the services
-							 ggg=gon.claim_params.claim.service_lines[j];
-							 //create variable shifted from index to match data class
-							 jj=j+1;
-							 //enter date into table cell on this row
-							 $("tbody tr:eq("+d+") #date"+jj).text(ggg.service_date_from);
-							 //log onto console ggg variable
-							 console.log(ggg);
-							 //end for loop for object keys length (service dates)
-							}
-						//end ajax success function call
-						$("#wait").css("display","none");
-						  }
-				  //end ajax object
-				  });
-				  //end if hid and elid exists condition function
-				  }
-				  
-				//end table row for loop
-			  }
-			  //loop through date columns and hide if empty
-			  if (datefive>0) 
-			  {tab.column(14).visible(false);
-			  }
-			  if (datefour>0) 
-			 {tab.column(13).visible(false);
-			 }
-			  if (datethree>0) 
-		     {tab.column(12).visible(false);
-			 }
-			//  if (datethree>0) 
-			//  {
-			//  }
-			//  if (datetwo>0) 
-			//  {
-			//  }
- 		//end chrome send message function
-		});
-	//chrome query function end		
-    }); 
-//end twopac2 button click function
+}
+
+else (window.location.href.includes('report2.html'))
+{
+function addDays(date, days) {
+		var result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result;
+		}
+       
+	  nd = new Date();
+	  st= nd.getMonth()+1+"/"+nd.getDate()+"/"+nd.getFullYear();
+	  en=addDays(st, 14);
+	  
+ $('input[name="daterange"]').daterangepicker({
+    
+    "alwaysShowCalendars": true,
+    "startDate": "08/26/2020",
+    "endDate": "09/01/2020",
+	 "opens": "left"
+}, function(start, end, label) {
+  console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
 
+ $('#tablethingy tbody').on('click', 'td.details-control', function () {
+			  console.log("clicked");
+				 tr = $(this).closest('tr');
+				 row = tab.row( tr );
+				 console.log(tr);
+				 console.log(row.child.isShown());
+				if (row.child.isShown() ) {
+					console.log("shown");
+					// This row is already open - close it
+					row.child.hide();
+					tr.removeClass('shown');
+					console.log("class removed");
+					}
+				else {
+					// Open this row
+					console.log("not shown");
+					row.child.show();
+					tr.addClass('shown');
+					console.log("class added");
+					}
+					});
+
+	dr=$("input").val();
+	er=dr.split(" - ");
+	ser = er[0].split("/");
+	eer = er[1].split("/");
+	
+	sta = ser[2]+"-"+ser[0]+"-"+ser[1];
+	ena = eer[2]+"-"+eer[0]+"-"+eer[1];
+		
+ $.ajax({url: "https://secure.simplepractice.com/reports/insurance-payment-reports?clinicianId=84638&endsAt=2020-08-31&startsAt=2020-08-25", 
+		//on success of ajax call, then do execute this function
+		success: function(response)
+		{clnames=$(response).filter("script");
+			$("body").append("<div id='hdiv' style='display:none'></div>");
+			$("#hdiv").html(clnames[6]);
+			prnm = window.currentUser.included;
+			
+			prnml=prnm.length;
+			
+			for (j=0;j<prnml;j++)
+			{
+				if(prnm[j].type=="teamMembers")
+				{
+					clinid=prnm[j].id;
+					fclnam=prnm[j].attributes.firstName;
+					lclnam=prnm[j].attributes.lastName;
+				    $("#prac").append("<option value="+clinid+">"+fclnam+" "+lclnam+"</option>");
+				}
+			}
+		}		
+		}); 
+		
+//button click and function for electronic payments reports report/search thingamagigg
+$("#twopac2").on("click", function() {
+	//click button to start process
+	//display loading div
+	$("#waitdivs").append("<h1 id='waits' >Please Wait... Loading</h1></br>");
+	
+    	//add hidden div to store ajax results
+	$("body").append("<div id='hiddiv3' style='display:none'></div>");
+	//check to see if datatable is initiated, if it is, destroy it!! and clear table body
+		if($.fn.DataTable.isDataTable( '#tablethingy')){
+			console.log('destroy tab');
+			tab.destroy();
+			console.log($.fn.DataTable.isDataTable( '#tablethingy' )) 
+			console.log('clear tbod');
+			$("#tablethingy tbody").html("");}
+	//get dates from date range picker, process into useable form		
+	dr=$("input").val();
+	er=dr.split(" - ");
+	ser = er[0].split("/");
+	eer = er[1].split("/");
+	//set dates to variables sta and ena
+	sta = ser[2]+"-"+ser[0]+"-"+ser[1];
+	ena = eer[2]+"-"+eer[0]+"-"+eer[1];
+	//get practitioner numerical id from select input
+	pprac=$("#prac").val();
+	//construct url for ajax call
+	turl='https://secure.simplepractice.com/frontend/reports/insurance_payment_reports?filter%5BstartsAt%5D='+sta+'&filter%5BendsAt%5D='+ena+'&filter%5BclinicianId%5D='+pprac;
+	//ajax to get epr data
+		$.ajax({ url:turl, 
+		//weird header thing that allows all data to be passed for  some reason
+					headers: {
+					'accept': 'application/vnd.api+json'
+					//end headers
+					},
+					//make sync
+					async: false,
+					//on success, run this , pass data
+					success: function (data) {
+						
+					  //save data in dd
+					  dd=data;
+					  //get row data and store in ep
+					  ep=dd.data.attributes.rows;
+					  //get length of array of data
+					  grndln=ep.length;
+					  //loop through ep array (epr data)
+					  for(k=0;k<grndln;k++)
+					  {
+									  //get value of insurance hash id in this row of table and save in hid variable
+									  hid=ep[k]['clientHashedId'];
+									  //get value of eligible claim id in this row of table and save to elid variable
+									  elid=ep[k]['eligibleInsuranceClaimId'];
+									  console.log(k+hid+elid);
+									  //build the urls from these variables related to this row of data from epr
+									  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
+									  urltmp2="https://secure.simplepractice.com/clients/"+hid+"/overview";
+									  urltmp3="https://secure.simplepractice.com/billings/insurance_payments/"+ep[k]['insurancePaymentId'];
+									  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
+							  //construct table row and append to table	  
+							  $("#tablethingy tbody").append("<tr><td class=''></td><td><a target='_blank' href="+urltmp4+">"+ep[k]['createdAt']+"</a></td><td><a target='_blank' href="+urltmp2+">"+ep[k]['clientName']+"</a></td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td><a target='_blank' href="+urltmp+" >"+ep[k]['reportReferenceId']+"</a></td><td><a target='_blank' href=>"+ep[k]['controlNumber']+"</a></td><td><a target='_blank' href="+urltmp3+">"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td><td class='date1'></td><td class='date2'></td><td class='date3'></td><td class='date4'></td><td class='date5'></td><td class='date6'></td></tr>");
+						
+							  //if either hid or elid are null, then skiparoo
+							 if (hid=="null"||elid== "null")
+							  {}
+							  //if both are not null, then ... 
+							  else 
+								{
+								  //if either hid or elid are blank, then skiparoo
+								  if (hid=="blank"||elid=="blank"){}
+								  //if both are not blank, then... 
+								  else
+								  {
+								  //run ajax SYNCHRONOUSLY to get data from claim 
+										$.ajax({url: urltmp, 
+										//have to do it synchronously because of for loop which runs independent of ajax calls
+										async: false,
+										//on success of call, run this function, passing result
+											success: function(result){
+										  //filter result for scripts and store [5] in aresult variable
+										  aresult=$(result).filter('script')[5];
+										  //log into console that it is complete
+										  console.log("ajax complete, data gathered");
+										  //add script into hidden div
+										  $("#hiddiv3").append(aresult);
+										  //set len to 0						  
+										  len=0;				  
+										  
+											 for (m=0;m<6;m++)
+											{  
+										   if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
+												{
+												console.log('undef break'); 
+												break;
+												}
+										   else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
+												{console.log('length 0');
+												break;
+												}
+										   else
+												{len=len+1;
+											if($(".date1:eq("+k+")").length==0) {}
+											else{
+													switch (m) {
+														case 0:
+														$(".date1:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 1:
+														$(".date2:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 2:
+														$(".date3:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 3:
+														$(".date4:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 4:
+														$(".date5:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 5:
+														$(".date6:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													 
+																}
+												console.log('gon exists');
+											}
+											}
+										} 
+							//end success function
+							}
+										  //end ajax function
+										  });
+									//end 2nd else option
+								  }
+								//end 1st else option
+								}					  
+					  //end for loop through epr data array (k)
+					  }
+					  
+					  //initiate datatable and store in tab variable
+					  tab=$("#tablethingy").DataTable({paging:false});
+					  //tab.column(13).visible(false);
+												  
+								$('a.toggle-vis').on( 'click', function (e) {
+									e.preventDefault();
+							 
+									// Get the column API object
+									var column = tab.column( $(this).attr('data-column') );
+							 
+									// Toggle the visibility
+									column.visible( ! column.visible() );
+								} );
+							
+					//end ajax success function for call to get epr data
+					}
+						//end ajax for call to get epr data 
+			});
+	$("#waitdivs").css("display","none");
+//end twopac2 button click function
+});
 
 //function for when threepac2 button is clicked
 $("#threepac2").click(function() {
 	//when button is clicked, display loading message...
-	$("#wait").css("display","block");
+	$("#waitdiv").css("display","block");
 	//make ajax call
 		$.ajax({url: "https://secure.simplepractice.com/frontend/pay-periods?page%5Bsize%5D=50", 
 		//on success of ajax call, then do execute this function
@@ -1033,7 +1161,7 @@ $("#threepac2").click(function() {
 			//append button irbcbut2 to irbccon
 			$("#irbccon").append("<button id='irbcbut2' style=''>Compare EPR and IRBC</button>");
 			//hide loading message
-			$("#wait").css("display","none");
+			//$("#wait").css("display","none");
 			 //onclick of irbc2 ajax button, run this function...
 			$("#irbcbut2").click(function(){
 			//display loading field	
@@ -1096,7 +1224,7 @@ $("#threepac2").click(function() {
 					//end for loop through redder array and have new filtered array joj
 					}
 					//set person variable to name of data from other page
-					person=$("#name").text().trim();
+					person=$("#prac option:selected").text();
 					//create index variable e and set to 1 (to skip header line in array)  
 					e=1;
 					//create sky array
@@ -1126,61 +1254,93 @@ $("#threepac2").click(function() {
 						for (u=1;u<air;u++)
 						// for each row, get value of claim number and store as cloud variable from ajax to ipc report
 							{
+								if (sky[u][0].length>0){
 							//claim id from ajax:
 							cloud = sky[u][4].slice(7);
 							//create match variable and set to 0
 							matches=0;
+							/* Formatting function for row details - modify as you need */
 								//loop through table rows
 								for (t=0;t<tbone;t++)
 								//if claim id is equal in sky array matches claim id in table, then...
 									{ 
-									if($("tbody tr:eq("+t+") td.eliinclid").text()==cloud)
+									if(tab.row(t).data()[11]==cloud)
 									//set column value to claim id
-									{	
-										tre=$('tbody tr:eq('+t+')');
-									tab.row(tre).child( '<tr>'+
-									'<td>'+sky[u][3]+'</td>'+
-									'<td>'+sky[u][8]+'</td>'+
-									'<td>'+sky[u][2]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+'blank'+'</td>'+
-									'<td>'+'blank'+'</td>'+
-									'<td>'+sky[u][10]+'</td>'+
-									'<td>'+sky[u][6]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'<td>'+sky[u][11]+'</td>'+
-									'</tr>').show();
+									{	console.log('matches');
+										
+										tre=tab.row(t);
+											$( tab.row(tre).node()).children().first().addClass('details-control');
+											tab.row(tre).child( "<table><tr style='background-color:#a8d0e0'>"+
+							
+											"<td>"+sky[u][3]+"</td>"+
+											"<td>"+sky[u][8]+"</td>"+
+											"<td>"+sky[u][2]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+"blank"+"</td>"+
+											"<td>"+"blank"+"</td>"+
+											"<td>"+sky[u][10]+"</td>"+
+											"<td>"+sky[u][6]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td>"+
+											"</tr></table>");
 									//$("tbody tr:eq("+t+") td#total").text(cloud);
 										//loop through date column rows in table
 										
 									//set matches indicator to 1, indicating that a match was found
-									
+									matches=1;
 									}
 									//end for loop through table rows
-									}
+								}
+								if(matches==0){
+							var rowNode = tab.row.add([ sky[u][3],sky[u][8],sky[u][2],sky[u][11],'blank','blank',sky[u][10],sky[u][6],'blank','blank','blank','blank','blank','blank','blank','blank','blank','blank','blank','blank'])
+							.draw()
+							.node();
+ 
+						$( rowNode )
+							.css( 'color', 'red' )
+							.animate( { color: 'black' } );
+								}
+								}
 							//after for loop through all rows of table, it no match is found, then add row with info
 							
 						//end for loop through sky array items
-					//hide loading field
-					$("#wait").css("display","none");			
-					}
-						//end ajax success function
+					
+						//end 'u' for loop
+						  }
+						  //end ajax success function call
+						  }
+				  //end ajax object
+				  });
+				  	$("#wait").css("display","none");
+				  //end click function
+				  });
+				  
+				//end table row for loop			
+					
+					//end ajax success function
+						
 					}
 					  //end ajax call
 					});
-						
+						//hide loading field
+		$("#wait").css("display","none");	
 		//end click irbcbut button function	
-	});
+
 	//end ajas success function
-	}
+	
 		 //end ajax call
-		 });
+		
 //end threepac2 cluck button function	
 });
+
+};
+
+			   
