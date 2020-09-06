@@ -134,8 +134,14 @@ $("#twopac").on("click", function () {
 								var ins_charge = sumcol(13);
 								var ins_paid = sumcol(14);
 								var ins_unpaid = sumcol(15);
-							
-							
+								
+								var cl_copayCharged = sumcol(8,12,"UNPAID") + sumcol(8,12,"PAID") + sumcol(8,12,"UNBILLED");
+								var cl_copayPaid = sumcol(10,12,"UNPAID") + sumcol(10,12,"PAID") + sumcol(10,12,"UNBILLED");
+								
+								var ffsCharged = sumcol(8,12,"null");
+								var ffsPaid = sumcol(10,12,"null");
+								
+								var Ins_Charged = 
 								
 								
 								

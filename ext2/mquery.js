@@ -17,9 +17,23 @@
 								
 							}
 							
+						function countcol(countcolumn, matchcon)
+							{
+							 var io = tab.rows().data().length;
+							 var cnt = 0;
+							 for (h=0;h<io;h++){
+								 if (roww(h)[countcolumn]==matchcon)
+								 {
+								  cnt=cnt+1;	  								 
+								 }
+								}	
+							 return cnt;
+							}
+							
+							
 						function sumcol(addcolumn,refcolumn,matchcon) {
 							if(addcolumn && refcolumn && matchcon)
-								{var io=roww(addcolumn).length;
+								{var io=tab.rows().data().length;
 									tott=0;
 								for (h=0;h<io;h++)
 									{
