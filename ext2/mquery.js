@@ -18,7 +18,8 @@
 							}
 							
 						function countcol(countcolumn, matchcon)
-							{
+							{if(matchcon) {
+								
 							 var io = tab.rows().data().length;
 							 var cnt = 0;
 							 for (h=0;h<io;h++){
@@ -28,6 +29,21 @@
 								 }
 								}	
 							 return cnt;
+							}
+							else {
+								 var io = tab.rows().data().length;
+							 var cnt = 0;
+							 for (h=0;h<io;h++){
+								 
+								  cnt=cnt+1;	  								 
+								 
+								}	
+							 return cnt;
+								
+								
+							}
+							
+							
 							}
 							
 							
@@ -42,9 +58,10 @@
 										  tt=roww(h)[refcolumn];
 										var g= cash(roww(h)[addcolumn]);
 										tott=tott+g;
-										console.log("all 3:" +h+ tott);
+										
 											}
 									}
+									tott=parseFloat(tott);
 								return tott;}
 								
 							else if(addcolumn && refcolumn && !matchcon)
@@ -54,9 +71,9 @@
 									{
 									var g= cash(roww(h)[addcolumn]);
 									tott=tott+g;
-									console.log("just two:"+tott);
+									
 									}
-								
+								tott=parseFloat(tott);
 							return tott;}
 							else(addcolumn && !refcolumn && !matchcon)
 							{var io=tab.rows().data().length;
@@ -65,9 +82,9 @@
 									{
 									var g= cash(roww(h)[addcolumn]);
 									tott=tott+g;
-									console.log("one:"+tott);
+									
 									}
-								
+								tott=parseFloat(tott);
 							return tott;}
 							
 							}
@@ -75,8 +92,39 @@
 								
 							
 						
-						function inspaid() {
+						function Highlow(index) {
+									var Hll= tab.rows()[0].length;
+										var ngt = 0;
+										var agt = 0;
+										var nlt = 0;
+										var alt = 0;
+										var bdn = [];
 							
+							for (y=0;y<Hll;y++)
+							{
+									var ii = cash(roww(y)[index]);
+								if(roww(y)[index][0]=="$")
+								{ 
+									if (ii<50)
+									{ nlt=nlt+1;
+									  alt=alt+cash(roww(y)[index]);
+									}
+									else if (ii>49)
+									{
+									 ngt=ngt+1;
+									 agt=agt+cash(roww(y)[index]);
+									}
+									else 
+									{
+																	
+									}	
+								}	
 							
-							
-						}
+							}
+						
+						bdn['ngt']=ngt;
+						bdn['agt']=agt;
+						bdn['nlt']=nlt;
+						bdn['alt']=alt;
+						return bdn;
+						};
