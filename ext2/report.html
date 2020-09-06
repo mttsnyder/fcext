@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <title>FC Ins Report</title>
     <script src="jquery.min.js"></script>
+	<script src="lodash.js"></script>
+	<script src="tabulator.min.js"></script>
+	<link href="tabulator.min.css" rel="stylesheet">
+	
 	<script type="text/javascript" src="moment.min.js"></script>
 	<script type="text/javascript" src="daterangepicker.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css">
 	<script type="text/javascript" src="dataTables.js"></script>
 	<link rel="stylesheet" type="text/css" src="dataTables.css">
 	<link href="css/bootstrap.min.css" rel="stylesheet" **media="screen"** type="text/css">
-
-    <style>
+	<script src="mquery.js"></script>
+    
+	<style>
         @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
         .container {
             /*max-height: 600px;
@@ -139,11 +144,11 @@
     <div class="tab">
         <table id="tablethingy">
 				<thead>
-				<tr>
+				<!-- <tr>
 					<th colspan="7">Appointment</th>
 					<th colspan="5">Client Responsibility</th>
 					<th colspan="4">Insurance Responsibility</th>
-					</tr>
+					</tr> -->
 					
 					<tr>
 					<th>Date of Service</th>
@@ -163,7 +168,7 @@
 					<th>Ins. Paid</th>
 					<th>Unpaid</th>
 					</tr>
-					</tr>
+					
 				</thead>
 				
 				<tbody>

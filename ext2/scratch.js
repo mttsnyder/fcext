@@ -384,3 +384,35 @@ success: function (data) {
 				  hgh=result;}});
 						
 						
+						
+						
+					////////--	
+						
+						
+    TableLoader.register("column-groups", function(){
+    //Column Grouping Example
+    var example_table_column_grouping = new Tabulator("#example-table-column-grouping", {
+        height:"311px",
+        columnHeaderVertAlign:"bottom", //align header contents to bottom of cell
+        data:tabledata,
+        columns:[
+        {title:"Name", field:"name", width:160},
+        {//create column group
+            title:"Work Info",
+            columns:[
+            {title:"Progress", field:"progress", hozAlign:"right", sorter:"number", width:100},
+            {title:"Rating", field:"rating", hozAlign:"center", width:80},
+            {title:"Driver", field:"car", hozAlign:"center", width:80},
+            ],
+        },
+        {//create column group
+            title:"Personal Info",
+            columns:[
+            {title:"Gender", field:"gender", width:90},
+            {title:"Favourite Color", field:"col", width:140},
+            {title:"Date Of Birth", field:"dob", hozAlign:"center", sorter:"date", width:130},
+            ],
+        },
+        ],
+    });
+})

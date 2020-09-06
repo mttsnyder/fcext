@@ -116,44 +116,39 @@ $("#twopac").on("click", function () {
 						  success: function(result){	
 								hgh=result.data.attributes.rows;
 								lll=hgh.length;
-								tott=0
+							
 							for (a=0;a<lll;a++){
 								
 								urltmpb = "https://secure.simplepractice.com/calendar/appointments/"+hgh[a]['id'];
 								$("#tablethingy tbody").append("<tr><td><a target='_blank' href=urltmpb >"+hgh[a]['startTime']+"</a></td><td>"+hgh[a]['clientName']+"</td><td>"+hgh[a]['clinicianName']+"</td><td>"+hgh[a]['cptCodes'][0]+"</td><td>"+hgh[a]['ratesForAppointment'][0]+"</td><td>"+hgh[a]['unitsForAppointment'][0]+"</td><td>"+hgh[a]['fee']+"</td><td>"+hgh[a]['clientPaidStatus']+"</td><td>"+hgh[a]['clientCharge']+"</td><td>"+hgh[a]['uninvoicedFee']+"</td><td>"+hgh[a]['clientPaid']+"</td><td>"+hgh[a]['balance']+"</td><td>"+hgh[a]['insurancePaidStatus']+"</td><td>"+hgh[a]['insuranceCharge']+"</td><td>"+hgh[a]['insuranceAmountPaid']+"</td><td>"+hgh[a]['insuranceBalance']+"</td></tr>")
 							// end for loop through rows of data array from sessions ajax call
-							
 							}
 							//initialize data table
-							tab=$("#tablethingy").DataTable({paging:false});
-								var total_fee= sumcol(6);
-								var cl_charge = sumcol(8);
-								var cl_uninv = sumcol(9);
-								var cl_paid = sumcol(10);
-								var cl_unpaid = sumcol(11);
-								var ins_charge = sumcol(13);
-								var ins_paid = sumcol(14);
-								var ins_unpaid = sumcol(15);
+							//tab=$("#tablethingy").DataTable({paging:false});
 							
-							
-								
-								
-								
-								
-							
-								
-								
-								
-								
-								
-								
-							
-							
-							
-							
-							
-							
-							
+							example = new Tabulator("#tablethingy", {layout:"fitDataTable"/*
+								height:"311px",
+								columnHeaderVertAlign:"bottom", //align header contents to bottom of cell
+								 columns:[
+								{title:"Name", field:"name", width:160},
+								{//create column group
+									title:"Work Info",
+									columns:[
+									{title:"Progress", field:"progress", hozAlign:"right", sorter:"number", width:100},
+									{title:"Rating", field:"rating", hozAlign:"center", width:80},
+									{title:"Driver", field:"car", hozAlign:"center", width:80},
+									],
+								},
+								{//create column group
+									title:"Personal Info",
+									columns:[
+									{title:"Gender", field:"gender", width:90},
+									{title:"Favourite Color", field:"col", width:140},
+									{title:"Date Of Birth", field:"dob", hozAlign:"center", sorter:"date", width:130},
+									],
+								},
+								], */
+							});
 						// end ajax success function	
 						}
 						//end ajax call to get data for appointments
