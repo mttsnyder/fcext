@@ -416,3 +416,57 @@ success: function (data) {
         ],
     });
 })
+
+
+
+
+/////
+
+
+
+https://secure.simplepractice.com/frontend/treatable-clients/2274147?include=clientBillingOverview%2CstripeCards%2CinsuranceInfos%2CinsuranceInfos.eligibleInsuranceProviderName%2CinsuranceInfos.primaryProviderName%2CinsuranceInfos.currentCoverageReport%2CcurrentInsuranceAuthorization%2ClatestInvoices%2ClatestBillingDocuments&fields%5Bappointments%5D=startTime%2CattendanceStatus&fields%5Binvoices%5D=cursorId%2CdisplayName%2CdisplayStatus%2CinvoiceDate&fields%5Bstatements%5D=cursorId%2Cname%2CstartDate%2CendDate&fields%5Bsuperbills%5D=cursorId%2Cname%2CstartDate%2CendDate&fields%5Bclients%5D=clientBillingOverview%2CstripeCards%2CinsuranceInfos%2CcurrentInsuranceAuthorization%2ClatestInvoices%2ClatestBillingDocuments%2Cname%2ClastName%2CpreferredName&fields%5BclientCouples%5D=clientBillingOverview%2CstripeCards%2CinsuranceInfos%2CcurrentInsuranceAuthorization%2ClatestInvoices%2ClatestBillingDocuments%2CpreferredName%2CfirstNameLastInitial
+
+
+
+
+https://secure.simplepractice.com/frontend/treatable-clients?fields%5Bappointments%5D=startTime%2CattendanceStatus%2CclientConfirmationStatus%2CrecurringAppointment&filter%5BhashedId%5D=32cd07add92271d9&filter%5BinActiveTreatment%5D%5B%5D=true&filter%5BinActiveTreatment%5D%5B%5D=false&include=upcomingAppointments%2CupcomingAppointments.recurringAppointment%2CclientAdminNote%2CclientRelationships.relatedClient%2CclientRelationships.relatedClient.clientPortalSettings%2CclientRelationships.reminderPhone%2CautopayReminder%2Caddresses
+
+
+
+https://secure.simplepractice.com/frontend/appointments/928056407?include=client%2Cclient.insuranceInfos%2Cclient.phones%2Cclient.emails%2Cclient.reminderEmail%2Cclient.stripeCards%2Cclient.clientRelationships.relatedClient.phones%2Cclient.clientRelationships.relatedClient.emails%2Cclient.clientRelationships.reminderPhone%2Cclient.clientRelationships.reminderEmail%2Csuperbill%2CcoupleClient%2Cinvoices%2Cinvoices.client%2CrecurringAppointment%2Cpractice.billingInsuranceSettings
+
+ajax to get client hashed id
+
+hgh.included[2].attributes.hashedId
+
+used hased id to access client file
+
+https://secure.simplepractice.com/clients/52963642ca61d962/billing?startDate=2020-08-01
+
+search for date and then get claim info and create link to claim
+
+https://secure.simplepractice.com/clients/52963642ca61d962/insurance_claims/63476981
+
+
+or
+
+jj="https://secure.simplepractice.com/frontend/reports/appointments?filter%5BincludeInsurance%5D=true&filter%5BclientHashedId%5D=52963642ca61d962"
+
+ $.ajax({url: jj, 
+					//accept data in this form
+					headers: {
+							'accept': 'application/vnd.api+json'
+								},
+						  //have to do it synchronously because of for loop which runs independent of ajax calls
+					      async: false,
+						  //on success of call, run this function, passing result
+						  success: function(result){	hgh=result.data.attributes.rows[0];}})
+
+jj="https://secure.simplepractice.com/frontend/reports/appointments?filter%5BincludeInsurance%5D=true&filter%5BclientHashedId%5D=52963642ca61d962"
+
+
+hgh.data.attributes.rows
+
+
+claim template:
+https://secure.simplepractice.com/clients/52963642ca61d962/insurance_claims/62525921

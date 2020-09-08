@@ -60,7 +60,8 @@ function addDays(date, days) {
 	  //add 14 days to date and store as en var
 	  en=addDays(st, 14);
 	  //create date range and activate on input in hmtl
- $('input[name="daterange"]').daterangepicker({ranges: {
+ $('input[name="daterange"]').daterangepicker({
+    ranges: {
         'Today': [moment(), moment()],
         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -69,9 +70,8 @@ function addDays(date, days) {
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     },
     "alwaysShowCalendars": true,
-    "startDate": "08/26/2020",
-    "endDate": "09/01/2020",
-	 "opens": "left"
+    "startDate": "09/01/2020",
+    "endDate": "09/07/2020"
 }, function(start, end, label) {
   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
@@ -102,6 +102,7 @@ function addDays(date, days) {
 	
 
 $("#twopac").on("click", function () {
+	$('#togdiv').css("display","block");
   //click button to start process
   if($.fn.DataTable.isDataTable( '#tablethingy')){
 			console.log('destroy tab');
@@ -287,9 +288,18 @@ $("#twopac").on("click", function () {
 								
 						$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
-							 
+									hhh=$(this).index();
+							      if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(35, 82, 124)") {
+									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(184, 84, 66)")
+											console.log("color changed");						   
+								   }
+								    else if ($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(184, 84, 66)") {
+									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(35, 82, 124)")
+														console.log("color changed back");				   
+								  }
+								  else {}
 									// Get the column API object
-									var column = tab.column( $(this).attr('data-column') );
+									 column = tab.column( $(this).attr('data-column') );
 							 
 									// Toggle the visibility
 									column.visible( ! column.visible() );
@@ -680,15 +690,24 @@ $("#twopac2").on("click", function() {
 					  tab=$("#tablethingy").DataTable({paging:false});
 					  //tab.column(13).visible(false);
 												  
-								$('a.toggle-vis').on( 'click', function (e) {
+									$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
-							 
+									hhh=$(this).index();
+							      if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(35, 82, 124)") {
+									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(184, 84, 66)")
+											console.log("color changed");						   
+								   }
+								    else if ($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(184, 84, 66)") {
+									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(35, 82, 124)")
+														console.log("color changed back");				   
+								  }
+								  else {}
 									// Get the column API object
-									var column = tab.column( $(this).attr('data-column') );
+									 column = tab.column( $(this).attr('data-column') );
 							 
 									// Toggle the visibility
 									column.visible( ! column.visible() );
-								} );
+								} );	
 							
 					//end ajax success function for call to get epr data
 					}
