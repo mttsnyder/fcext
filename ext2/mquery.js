@@ -11,7 +11,16 @@
 							
 						function cash(string) {
 								if (string[0]=="$"){
+									var tt = string.length-1;
+									if(string[tt]=="R")
+									{
+									return 0-parseFloat(string.split(" ")[0].slice(1));
+										
+									}
+								else{
+									
 								return parseFloat(string.slice(1));
+								}
 								}
 								else {return 0;}
 								

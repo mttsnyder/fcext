@@ -44,7 +44,7 @@ if (window.location.href.includes('report.html'))
 		//end ajax to get practitioner names
 		}); 			
 			
-//function to add dats to date			
+//function to add dates to date			
 function addDays(date, days) {
 	//create new date object
 		var result = new Date(date);
@@ -76,46 +76,20 @@ function addDays(date, days) {
   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 });
 
-//segment to add click event listener to td in table
- $('#tablethingy tbody').on('click', 'td.details-control', function () {
-			  console.log("clicked");
-				 tr = $(this).closest('tr');
-				 row = tab.row( tr );
-				 console.log(tr);
-				 console.log(row.child.isShown());
-				if (row.child.isShown() ) {
-					console.log("shown");
-					// This row is already open - close it
-					row.child.hide();
-					tr.removeClass('shown');
-					console.log("class removed");
-					}
-				else {
-					// Open this row
-					console.log("not shown");
-					row.child.show();
-					tr.addClass('shown');
-					console.log("class added");
-					}
-					});
-
-	
-
+//on click of twopac button, get data and run function...
 $("#twopac").on("click", function () {
+	//add column hiding links
 	$('#togdiv').css("display","block");
-  //click button to start process
+  //if data table exists, clear and destroy
   if($.fn.DataTable.isDataTable( '#tablethingy')){
-			console.log('destroy tab');
 			tab.destroy();
-			console.log($.fn.DataTable.isDataTable( '#tablethingy' )) 
-			console.log('clear tbod');
+			
 			$("#tablethingy tbody").html("");
 			$("#sums").html("");
 			$("#clsums").html("");
 			$("#sign").html("");}
-  
-  
-  dr=$("input").val();
+    
+	dr=$("input").val();
 	er=dr.split(" - ");
 	ser = er[0].split("/");
 	eer = er[1].split("/");
@@ -126,54 +100,168 @@ $("#twopac").on("click", function () {
 				//build url from date range from date range selector and clinician id
 				urltmpa="https://secure.simplepractice.com/frontend/reports/appointments?filter%5BstartsAt%5D="+sta+"&filter%5BendsAt%5D="+ena+"&filter%5BincludeInsurance%5D=true&filter%5BclinicianId%5D="+pprac;
 						
-						  //run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
+				//run ajax SYNCHRONOUSLY to get data from this web page related to claim related to ths page
 	            $.ajax({url: urltmpa, 
 					//accept data in this form
-					headers: {
+						headers: {
 							'accept': 'application/vnd.api+json'
 								},
 						  //have to do it synchronously because of for loop which runs independent of ajax calls
 					      async: false,
 						  //on success of call, run this function, passing result
-						  success: function(result){	
+						  success: function(result){
+								//store data in hgh variable
 								hgh=result.data.attributes.rows;
+								//get length of resulting data
 								lll=hgh.length;
+								//set tott variable to 0
 								tott=0
-							for (a=0;a<lll;a++){
-								if (hgh[a]['cptCodes'][0]=='0990'||hgh[a]['cptCodes'][0]=='020202')
-								{}
-							else
-							{
-								
-								urltmpb = "https://secure.simplepractice.com/calendar/appointments/"+hgh[a]['id'];
-								$("#tablethingy tbody").append("<tr><td><a target='_blank' href="+urltmpb+">"+hgh[a]['startTime']+"</a></td><td>"+hgh[a]['clientName']+"</td><td>"+hgh[a]['clinicianName']+"</td><td>"+hgh[a]['cptCodes'][0]+"</td><td>"+hgh[a]['ratesForAppointment'][0]+"</td><td>"+hgh[a]['unitsForAppointment'][0]+"</td><td>"+hgh[a]['fee']+"</td><td>"+hgh[a]['clientPaidStatus']+"</td><td>"+hgh[a]['clientCharge']+"</td><td>"+hgh[a]['uninvoicedFee']+"</td><td>"+hgh[a]['clientPaid']+"</td><td>"+hgh[a]['balance']+"</td><td>"+hgh[a]['insurancePaidStatus']+"</td><td>"+hgh[a]['insuranceCharge']+"</td><td>"+hgh[a]['insuranceAmountPaid']+"</td><td>"+hgh[a]['insuranceBalance']+"</td></tr>")
-							// end for loop through rows of data array from sessions ajax call
-							}
-							}
+								//loop through data set array
+								for (a=0;a<lll;a++)
+								{
+									//if cptcodes are 0990 or 020202, exclude, otherwise...
+									if (hgh[a]['cptCodes'][0]=='0990'||hgh[a]['cptCodes'][0]=='020202')
+									{}
+									else
+									{
+									//build url from hgh data to create a tag/link below 
+									urltmpb = "https://secure.simplepractice.com/calendar/appointments/"+hgh[a]['id'];
+									//if insurance paid status is unbilled or unpaid, then... 									
+										if(hgh[a]['insurancePaidStatus']=="UNBILLED"||hgh[a]['insurancePaidStatus']=="UNPAID")
+										{
+											$("#tablethingy tbody").append("<tr><td id='indexbut' class='details-controla'></td><td><a target='_blank' href="+urltmpb+">"+hgh[a]['startTime']+"</a></td><td>"+hgh[a]['clientName']+"</td><td>"+hgh[a]['clinicianName']+"</td><td>"+hgh[a]['cptCodes'][0]+"</td><td>"+hgh[a]['ratesForAppointment'][0]+"</td><td>"+hgh[a]['unitsForAppointment'][0]+"</td><td>"+hgh[a]['fee']+"</td><td>"+hgh[a]['clientPaidStatus']+"</td><td>"+hgh[a]['clientCharge']+"</td><td>"+hgh[a]['uninvoicedFee']+"</td><td>"+hgh[a]['clientPaid']+"</td><td>"+hgh[a]['balance']+"</td><td>"+hgh[a]['insurancePaidStatus']+"</td><td>"+hgh[a]['insuranceCharge']+"</td><td>"+hgh[a]['insuranceAmountPaid']+"</td><td>"+hgh[a]['insuranceBalance']+"</td></tr>");								
+										}
+										else
+										{
+											$("#tablethingy tbody").append("<tr><td id='indexbut'></td><td><a target='_blank' href="+urltmpb+">"+hgh[a]['startTime']+"</a></td><td>"+hgh[a]['clientName']+"</td><td>"+hgh[a]['clinicianName']+"</td><td>"+hgh[a]['cptCodes'][0]+"</td><td>"+hgh[a]['ratesForAppointment'][0]+"</td><td>"+hgh[a]['unitsForAppointment'][0]+"</td><td>"+hgh[a]['fee']+"</td><td>"+hgh[a]['clientPaidStatus']+"</td><td>"+hgh[a]['clientCharge']+"</td><td>"+hgh[a]['uninvoicedFee']+"</td><td>"+hgh[a]['clientPaid']+"</td><td>"+hgh[a]['balance']+"</td><td>"+hgh[a]['insurancePaidStatus']+"</td><td>"+hgh[a]['insuranceCharge']+"</td><td>"+hgh[a]['insuranceAmountPaid']+"</td><td>"+hgh[a]['insuranceBalance']+"</td></tr>");
+										}
+									//end else loop for cpt code
+									}	
+								// end for loop through rows of data array from sessions ajax call
+								}
+								//create data table js object
+								tab=$("#tablethingy").DataTable({paging:false});
+								//get length of table rows array and store as gog
+								var gog=tab.rows().data().length;		
+								//loop through array of table rows
+								for (g=0;g<gog;g++)
+								{
+								//create third url from first url and data from return of first ajax call for each table row
+								urltmpc=urltmpa+"&filter%5BclientHashedId%5D="+hgh[g]['clientHashedId'];
+								//ajax on this newly created url to get claim info for the client on this row
+								$.ajax({url: urltmpc, 
+										//accept data in this form
+										headers: {
+										'accept': 'application/vnd.api+json'
+											},
+						 				//have to do it synchronously because of for loop which runs independent of ajax calls
+										  async: false,
+										  //on success of call, run this function, passing result
+										  success: function(data){
+													//store data in hg variable
+													hg=data.data.attributes.rows;
+													//get length of resulting data set and store in redtail variable
+													var redtail=hg.length;
+														//loop through resulting data array
+														for (f=0;f<redtail;f++)
+														{
+															//if data exists for this row in the table, then... 
+															if(hgh[g])
+															{ 
+																//compare date of each resulting row and compare to date of row of table, if the match
+																if(hg[f]['startTime']==hgh[g]['startTime'])
+																{
+																	//get claim number for this claim and store in blackhawk variable
+																	var blackhawk=hg[f]['insuranceClaims'][0];
+																}
+																//if the don't match
+																else
+																{
+																	break;
+																}																												
+															//end if statement for hgh data exists
+															}
+														//end for loop through resulting data array	
+														}
+													$.ajax({url: "https://secure.simplepractice.com/clients/5b22ad548f5c1e17/insurance_claims/63193607/payment_reports", 
+										//accept data in this form
+										
+						 				//have to do it synchronously because of for loop which runs independent of ajax calls
+										  async: false,
+										  //on success of call, run this function, passing result
+										  success: function(data){
+                                              ghgh=$(data).find(".claim-history").find('li').text().trim();
+											  										
+												
+													//get this table row object and store as tre	
+													tre=tab.row(g);
+													//get row object and add child row 
+													tab.row(tre).child( "<table><tr style='background-color:#e1f4f7'>"+
+									
+													"<td>/-----Spacer-----/</td>"+
+													"<td>"+$(tre.node()).children()[1].textContent+"</td>"+
+													"<td>"+$(tre.node()).children()[2].textContent+"</td>"+
+													"<td></td>"+
+													
+													"<td><a target='_blank' href='https://secure.simplepractice.com/clients/"+hgh[g]['clientHashedId']+"/insurance_claims/"+blackhawk+"/payment_reports'>"+ghgh+"</a></td>"+
+																																
+													"</tr></table>");
+													
+													 }})
+													 //end ajax success function
+													 }
+													 //end ajax call
+													 })
+							//end for loop through table rows
+							}							
 							//initialize data table
-							tab=$("#tablethingy").DataTable({paging:false});
-								var total_fee= sumcol(6);
-								var Num_tot_sess = countcol(0);
+							//segment to add click event listener to td in table
+				$('#tablethingy tbody').on('click', 'td.details-controla', function () 
+					{
+					//get closes tr object and store in tr variable
+					 tr = $(this).closest('tr');
+					 //use this to get row object in datatable object and store as row
+					 row = tab.row( tr );
+					//condition if child row is shown, then..
+				if (row.child.isShown()) 
+					{
+					// This row is already open - close it
+					row.child.hide();
+					//remove class from row
+					tr.removeClass('shown');
+					}
+				else 
+					{
+					// Show this row
+					row.child.show();
+					//add class to row
+					tr.addClass('shown');
+					}
+					//end click function
+					});
+								//define variables and use functions to get data for summary
+								var total_fee= sumcol(7);
+								var Num_tot_sess = countcol(1);
 								
-								var cl_charge = sumcol(8);
-								var cl_uninv = sumcol(9);
-								var cl_paid = sumcol(10);
-								var cl_unpaid = sumcol(11);
-								var Num_cl_charge = countcol(7,"UNPAID")+countcol(7,"PAID");
-								var Num_cl_paid = countcol(7,"PAID");
+								var cl_charge = sumcol(9);
+								var cl_uninv = sumcol(10);
+								var cl_paid = sumcol(11);
+								var cl_unpaid = sumcol(12);
+								var Num_cl_charge = countcol(8,"UNPAID")+countcol(8,"PAID");
+								var Num_cl_paid = countcol(8,"PAID");
 								var Per_cl_paid = ((Num_cl_paid/Num_cl_charge)*100).toFixed(2);
 								var Num_cl_unpaid = parseFloat(Num_cl_charge) - parseFloat(Num_cl_paid);
 								
-								var cl_copayCharged = parseFloat(parseFloat(sumcol(8,12,"UNPAID")) + parseFloat(sumcol(8,12,"PAID")) + parseFloat(sumcol(8,12,"UNBILLED"))).toFixed(2);
-								var cl_copayPaid = parseFloat(sumcol(10,12,"UNPAID") + sumcol(10,12,"PAID") + sumcol(10,12,"UNBILLED")).toFixed(2);
+								var cl_copayCharged = parseFloat(parseFloat(sumcol(9,13,"UNPAID")) + parseFloat(sumcol(9,13,"PAID")) + parseFloat(sumcol(9,13,"UNBILLED"))).toFixed(2);
+								var cl_copayPaid = parseFloat(sumcol(11,13,"UNPAID") + sumcol(11,13,"PAID") + sumcol(11,13,"UNBILLED")).toFixed(2);
 								var Per_copay_paid = ((cl_copayPaid/cl_copayCharged)*100).toFixed(2);
-								var Num_Ins_paid = countcol(12, "PAID");
+								var Num_Ins_paid = countcol(13, "PAID");
 								var Avg_copay_paid = (cl_copayPaid/Num_Ins_paid).toFixed(2);
 								
-								var ffs_charge = sumcol(8,12,"null");
-								var ffs_paid = sumcol(10,12,"null");
+								var ffs_charge = sumcol(9,13,"null");
+								var ffs_paid = sumcol(11,13,"null");
 								
-								var Num_Ins_Sess = countcol(12,"PAID")+countcol(12,"UNPAID");
+								var Num_Ins_Sess = countcol(13,"PAID")+countcol(13,"UNPAID");
 								
 								var Per_Ins_paid = ((Num_Ins_paid/Num_Ins_Sess)*100).toFixed(2);
 								
@@ -184,9 +272,9 @@ $("#twopac").on("click", function () {
 								var Avg_ffs_paid = (ffs_paid/Num_ffs_sess).toFixed(2);
 								var Per_ffs_paid = ((ffs_paid/ffs_charge)*100).toFixed(2); 
 								
-								var ins_charge = sumcol(13);
+								var ins_charge = sumcol(14);
 								
-								var ins_paid = sumcol(14).toFixed(2);
+								var ins_paid = sumcol(15).toFixed(2);
 								var ins_unpaid = parseFloat(parseFloat(Ins_Est)-parseFloat(ins_paid)).toFixed(2);
 								var Per_Amn_Ins_paid = ((ins_paid/Ins_Est)*100).toFixed(2);
 								var Avg_Ins_paid = ((ins_paid/Num_Ins_paid)).toFixed(2);
@@ -196,10 +284,10 @@ $("#twopac").on("click", function () {
 								var Per_tot_amt_paid = ((tot_amt_paid/Est_tot_reimb)*100).toFixed(2);
 								var Est_Amt_Remain = parseFloat((parseFloat(Est_tot_reimb)-parseFloat(tot_amt_paid))).toFixed(2);
 								var Avg_Reimb_Sess = (Est_tot_reimb/Num_tot_sess).toFixed(2);
-								var Num_gt = Highlow(6)['ngt'];
-								var Amt_gt = Highlow(6)['agt'];
-								var Num_lt = Highlow(6)['nlt'];
-								var Amt_lt = Highlow(6)['alt'];
+								var Num_gt = Highlow(7)['ngt'];
+								var Amt_gt = Highlow(7)['agt'];
+								var Num_lt = Highlow(7)['nlt'];
+								var Amt_lt = Highlow(7)['alt'];
 								var Fee_gt = (Num_gt*14).toFixed(2);
 								var Fee_lt = (Amt_lt*.16).toFixed(2);
 								var Fee_tot = parseFloat(Fee_gt)+parseFloat(Fee_lt);
@@ -335,16 +423,16 @@ $("#twopac").on("click", function () {
     //function to abbreviate names
 	$("#fivepac").click(function () {
         totT=$("table tbody tr").length;
-        pearl=$("table tbody tr:eq(0) td:eq(1)")[0].innerHTML.trim().length;
+        pearl=$("table tbody tr:eq(0) td:eq(1)")[1].innerHTML.trim().length;
         if(pearl>2){
         for (i = 0; i < totT; i++) {
 
-          if ($("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ").length>2)
+          if ($("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML.trim().split(" ").length>2)
           {
-            $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[2].substr(0,1);
+            $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML.trim().split(" ")[1].substr(0,1);
           }
           else
-            $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[0].innerHTML.trim().split(" ")[1].substr(0,1);
+            $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML = $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML.trim().split(" ")[0].substr(0,1) + $("table tbody tr:eq("+i+") td:eq(1)")[1].innerHTML.trim().split(" ")[1].substr(0,1);
         }
 
     }
@@ -363,9 +451,9 @@ $("#twopac").on("click", function () {
         }
     });
     $("#sevenpac").click(function () {
-        var yoyoma=tab.rows()[0].length;
+        var yoyoma=tab.rows()[1].length;
         for(m=1;m<yoyoma;m++){
-            beaver =tab.row(m).data()[3]
+            beaver =tab.row(m).data()[4]
             if (beaver=="020202"||beaver=="0990"){
              $(".tr:eq(m)").hide();
             }
@@ -419,29 +507,29 @@ $("#twopac").on("click", function () {
 		//loop through rows in table
         for (i=0;i<llen;i++) {
 			//if insurance status is not empty
-          if($("table tbody tr:eq("+i+") td:eq(12)")[0].innerText.length>0) {
+          if($("table tbody tr:eq("+i+") td:eq(13)")[0].innerText.length>0) {
 			  //if table cell in insurance paid column is not a number...
-              if(isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(14)")[0].innerHTML.trim().substr(1)))) {
+              if(isNaN(parseFloat($("table tbody tr:eq("+i+") td:eq(15)")[0].innerHTML.trim().substr(1)))) {
 								//add test class and log to console
-                                  $("table tbody tr:eq("+i+") td:eq(12)").addClass("test"); console.log(i);
+                                  $("table tbody tr:eq("+i+") td:eq(13)").addClass("test"); console.log(i);
                 }
 				//if table cell in insurance paid column is a number...
               else {
 				  //change cell background color and log to console
-                  $("table tbody tr:eq("+i+") td:eq(12)").css("background-color","#f7e4e4"); console.log(i);
+                  $("table tbody tr:eq("+i+") td:eq(13)").css("background-color","#f7e4e4"); console.log(i);
                    };
                  };
 				 //if charge to client is a number, then...
-          if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(8)")[0].innerHTML.trim().substr(1)))) {
+          if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(9)")[0].innerHTML.trim().substr(1)))) {
 			  //if amount paid cell to client is number, then...
-            if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(10)")[0].innerHTML.trim().substr(1)))){
+            if($.isNumeric(parseFloat($("table tbody tr:eq("+i+") td:eq(11)")[0].innerHTML.trim().substr(1)))){
 				//change background of cell 
-              $("table tbody tr:eq("+i+") td:eq(10)").css("background-color","#cbd3f5");
+              $("table tbody tr:eq("+i+") td:eq(11)").css("background-color","#cbd3f5");
             }
 			//if paid amount is not a number (empty), then...
             else{
 				//change background color of cell
-              $("table tbody tr:eq("+i+") td:eq(10)").css("background-color","#f5f4d7");
+              $("table tbody tr:eq("+i+") td:eq(11)").css("background-color","#f5f4d7");
             }
           }
              };
@@ -449,7 +537,7 @@ $("#twopac").on("click", function () {
     $("#twelvepac").click(function () {
         tllen=tab.rows()[0].length;
           for (i=0;i<tllen;i++) {
-             if(roww(i)[12]=="UNPAID"||roww(i)[12]=="UNBILLED")
+             if(roww(i)[13]=="UNPAID"||roww(i)[13]=="UNBILLED")
 			 {
 				 
 			 }
@@ -468,9 +556,7 @@ $("#twopac").on("click", function () {
 			 }
         };
       });
-    
     }); //twopac function close
-
 }
 
 else (window.location.href.includes('report2.html'))

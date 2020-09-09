@@ -123,6 +123,15 @@
         .test {
           background-color: #e8faec;
         }
+		td.details-controla {
+			background: url('details_open.png') no-repeat center center;
+			cursor: pointer;
+		}
+		tr.shown td.details-controla {
+			background: url('details_close.png') no-repeat center center;
+		}
+		.toggle-vis{
+		color: #3174c7}
 
     </style>
 </head>
@@ -152,6 +161,7 @@
 					</tr> 
 					
 					<tr>
+					<th></th>
 					<th>Date of Service</th>
 					<th>Client</th>
 					<th>Clinician</th>
