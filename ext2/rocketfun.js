@@ -776,7 +776,7 @@ $("#twopac2").on("click", function() {
 					  //initiate datatable and store in tab variable
 					  tab=$("#tablethingy").DataTable({paging:false});
 					  //tab.column(13).visible(false);
-												  
+								$("#togdiv").css("display","block");				  
 									$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
 									hhh=$(this).index();
