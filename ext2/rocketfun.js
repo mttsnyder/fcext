@@ -638,7 +638,7 @@ function addDays(date, days) {
 $("#twopac2").on("click", function() {
 	//click button to start process
 	//display loading div
-	$("#waitdivs").append("<h1 id='waits' >Please Wait... Loading</h1></br>");
+	$("#waitdivs2").css("display","block");
 	
     	//add hidden div to store ajax results
 	$("body").append("<div id='hiddiv3' style='display:none'></div>");
@@ -679,6 +679,7 @@ $("#twopac2").on("click", function() {
 					  ep=dd.data.attributes.rows;
 					  //get length of array of data
 					  grndln=ep.length;
+					  var tottt=0;
 					  //loop through ep array (epr data)
 					  for(k=0;k<grndln;k++)
 					  {
@@ -694,7 +695,7 @@ $("#twopac2").on("click", function() {
 									  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
 							  //construct table row and append to table	  
 							  $("#tablethingy tbody").append("<tr><td class=''></td><td><a target='_blank' href="+urltmp4+">"+ep[k]['createdAt']+"</a></td><td><a target='_blank' href="+urltmp2+">"+ep[k]['clientName']+"</a></td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td><a target='_blank' href="+urltmp+" >"+ep[k]['reportReferenceId']+"</a></td><td><a target='_blank' href=>"+ep[k]['controlNumber']+"</a></td><td><a target='_blank' href="+urltmp3+">"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td><td class='date1'></td><td class='date2'></td><td class='date3'></td><td class='date4'></td><td class='date5'></td><td class='date6'></td></tr>");
-						
+								var tottt=tottt+cash(ep[k]['totalAmountPaid']);
 							  //if either hid or elid are null, then skiparoo
 							 if (hid=="null"||elid== "null")
 							  {}
@@ -771,7 +772,7 @@ $("#twopac2").on("click", function() {
 								}					  
 					  //end for loop through epr data array (k)
 					  }
-					  
+					  $("#totalp").append(tottt.toFixed(2));
 					  //initiate datatable and store in tab variable
 					  tab=$("#tablethingy").DataTable({paging:false});
 					  //tab.column(13).visible(false);
@@ -799,7 +800,7 @@ $("#twopac2").on("click", function() {
 					}
 						//end ajax for call to get epr data 
 			});
-	$("#waitdivs").css("display","none");
+	$("#waitdivs2").css("display","none");
 //end twopac2 button click function
 });
 
