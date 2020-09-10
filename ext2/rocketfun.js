@@ -640,6 +640,7 @@ $("#twopac2").on("click", function() {
 	//display loading div
 	$("#waitdivs2").css("display","block");
 	
+	
     	//add hidden div to store ajax results
 	$("body").append("<div id='hiddiv3' style='display:none'></div>");
 	//check to see if datatable is initiated, if it is, destroy it!! and clear table body
@@ -679,7 +680,9 @@ $("#twopac2").on("click", function() {
 					  ep=dd.data.attributes.rows;
 					  //get length of array of data
 					  grndln=ep.length;
-					  var tottt=0;
+					  var tot_bcbs=0;
+					  var tot_oth = 0;
+					  
 					  //loop through ep array (epr data)
 					  for(k=0;k<grndln;k++)
 					  {
@@ -695,7 +698,14 @@ $("#twopac2").on("click", function() {
 									  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
 							  //construct table row and append to table	  
 							  $("#tablethingy tbody").append("<tr><td class=''></td><td><a target='_blank' href="+urltmp4+">"+ep[k]['createdAt']+"</a></td><td><a target='_blank' href="+urltmp2+">"+ep[k]['clientName']+"</a></td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td><a target='_blank' href="+urltmp+" >"+ep[k]['reportReferenceId']+"</a></td><td><a target='_blank' href=>"+ep[k]['controlNumber']+"</a></td><td><a target='_blank' href="+urltmp3+">"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td><td class='date1'></td><td class='date2'></td><td class='date3'></td><td class='date4'></td><td class='date5'></td><td class='date6'></td></tr>");
-								var tottt=tottt+cash(ep[k]['totalAmountPaid']);
+								
+							if(ep[k]['payerName'].includes("Blue Cross Blue Shield of North Carolina")){
+								var tot_bcbs=tot_bcbs+cash(ep[k]['totalAmountPaid']);
+								}
+								else 
+								{
+									var tot_oth = tot_oth + cash(ep[k]['totalAmountPaid']);
+								};
 							  //if either hid or elid are null, then skiparoo
 							 if (hid=="null"||elid== "null")
 							  {}
@@ -772,20 +782,82 @@ $("#twopac2").on("click", function() {
 								}					  
 					  //end for loop through epr data array (k)
 					  }
-					  $("#totalp").append(tottt.toFixed(2));
+					  $("#totalpbc").append(tot_bcbs.toFixed(2));
+					  $("#totalpot").append(tot_oth.toFixed(2));
+					  
 					  //initiate datatable and store in tab variable
 					  tab=$("#tablethingy").DataTable({paging:false});
-					  //tab.column(13).visible(false);
-								$("#togdiv").css("display","block");				  
+					  $("#tablethingy").css('display','table');
+					  var util = tab.rows()[0].length;
+					  
+					  for (h=0;h<util;h++){
+											
+						  
+						  
+						  
+						if (tab.row(h).data()[16]=="")  
+						{	
+							tab.column(16).visible(false);
+							tab.column(17).visible(false);
+							tab.column(18).visible(false);
+							tab.column(19).visible(false);
+							$('a.toggle-vis:eq(16)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(17)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
+							
+							break;
+						}
+						if(tab.row(h).data()[17]=="")
+						{
+							tab.column(17).visible(false);
+							tab.column(18).visible(false);
+							tab.column(19).visible(false);
+							$('a.toggle-vis:eq(17)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
+							break;
+						}
+						if(tab.row(h).data()[18]=="")
+						{
+							tab.column(18).visible(false);
+							tab.column(19).visible(false);
+							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
+							break;
+						}
+						if (tab.row(h).data()[19]=="")
+						{
+							tab.column(19).visible(false);
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
+							break;
+						}
+								  
+					  }
+					  
+							tab.column(10).visible(false);
+							tab.column(13).visible(false);
+							tab.column(7).visible(false);
+							tab.column(12).visible(false);
+							tab.column(8).visible(false);
+							$('a.toggle-vis:eq(10)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(13)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(7)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(12)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(8)').css("color","rgb(184, 84, 66)");
+					 
+							$("#togdiv").css("display","block");	
+
+								
 									$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
 									hhh=$(this).index();
-							      if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(35, 82, 124)") {
+							      if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(49, 116, 199)") {
 									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(184, 84, 66)")
 											console.log("color changed");						   
 								   }
 								    else if ($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(184, 84, 66)") {
-									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(35, 82, 124)")
+									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(49, 116, 199)")
 														console.log("color changed back");				   
 								  }
 								  else {}
