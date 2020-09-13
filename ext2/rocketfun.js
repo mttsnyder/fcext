@@ -840,11 +840,11 @@ $("#twopac2").on("click", function() {
 							tab.column(7).visible(false);
 							tab.column(12).visible(false);
 							tab.column(8).visible(false);
-							$('a.toggle-vis:eq(10)').css("color","rgb(184, 84, 66)");
-							$('a.toggle-vis:eq(13)').css("color","rgb(184, 84, 66)");
-							$('a.toggle-vis:eq(7)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(9)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(12)').css("color","rgb(184, 84, 66)");
-							$('a.toggle-vis:eq(8)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(6)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(11)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(7)').css("color","rgb(184, 84, 66)");
 					 
 							$("#togdiv").css("display","block");	
 
@@ -1018,8 +1018,8 @@ $("#threepac2").click(function() {
 									if(tab.row(t).data()[11]==cloud)
 									//set column value to claim id
 									{	console.log('matches');
-										
-										tre=tab.row(t);
+										if (tab.row(t).child()==undefined){
+											tre=tab.row(t);
 											$( tab.row(tre).node()).children().first().addClass('details-control');
 											tab.row(tre).child( "<table><tr style='background-color:#a8d0e0'>"+
 							
@@ -1048,6 +1048,38 @@ $("#threepac2").click(function() {
 									//set matches indicator to 1, indicating that a match was found
 									matches=1;
 									}
+									else {
+										tre=tab.row(t);
+											$( tab.row(tre).node()).children().first().addClass('details-control');
+											tab.row(tre).child("<table style='background-color:#a8d0e0'>"+"<tr style='background-color:#a8d0e0'>"+
+											"<td>"+sky[u][3]+"</td>"+
+											"<td>"+sky[u][8]+"</td>"+
+											"<td>"+sky[u][2]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+"blank"+"</td>"+
+											"<td>"+"blank"+"</td>"+
+											"<td>"+sky[u][10]+"</td>"+
+											"<td>"+sky[u][6]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td>"+sky[u][11]+"</td>"+
+											"<td id='date1'></td><td id='date2'></td><td id='date3'></td><td id='date4'></td><td id='date5'></td><td id='date6'></td>"+
+											"</tr>"+$(tab.row(t).child()).find('tbody tr')[0].innerHTML+"</table>");
+									//$("tbody tr:eq("+t+") td#total").text(cloud);
+										//loop through date column rows in table
+										
+									//set matches indicator to 1, indicating that a match was found
+									matches=1;
+									}
+									}
+									
+									
 									//end for loop through table rows
 								}
 								if(matches==0){
