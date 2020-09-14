@@ -1,7 +1,7 @@
 //brings data from simple practice page into new page
 //this runs in the new report page
 
-//if window is report.html (for insurance report thingy)...
+//if window is report.html...
 if (window.location.href.includes('report.html'))
 {
 	//run ajax to get practitioner names...
@@ -558,31 +558,29 @@ $("#twopac").on("click", function () {
       });
     }); //twopac function close
 }
-//if window is report2 (for epr search thingy)...
+
 else (window.location.href.includes('report2.html'))
 {
-	//function to add days to date
-		function addDays(date, days) {
-				var result = new Date(date);
-				result.setDate(result.getDate() + days);
-				return result;
-				}
-      //set new date object and assign to variable nd 
+function addDays(date, days) {
+		var result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result;
+		}
+       
 	  nd = new Date();
 	  st= nd.getMonth()+1+"/"+nd.getDate()+"/"+nd.getFullYear();
-	  //add 14 days to date and create new date assigned to en
 	  en=addDays(st, 14);
-	  //create daterangepicker
-		 $('input[name="daterange"]').daterangepicker({
-			
-			"alwaysShowCalendars": true,
-			"startDate": "08/26/2020",
-			"endDate": "09/01/2020",
-			 "opens": "left"
-		}, function(start, end, label) {
-		  console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-		});
-//on clicking detail control circle in table, then run this function...
+	  
+ $('input[name="daterange"]').daterangepicker({
+    
+    "alwaysShowCalendars": true,
+    "startDate": "08/26/2020",
+    "endDate": "09/01/2020",
+	 "opens": "left"
+}, function(start, end, label) {
+  console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+});
+
  $('#tablethingy tbody').on('click', 'td.details-control', function () {
 			  console.log("clicked");
 				 tr = $(this).closest('tr');
@@ -604,22 +602,19 @@ else (window.location.href.includes('report2.html'))
 					console.log("class added");
 					}
 					});
-//get date range value
+
 	dr=$("input").val();
 	er=dr.split(" - ");
 	ser = er[0].split("/");
 	eer = er[1].split("/");
-	//built start and end date and store in variables
+	
 	sta = ser[2]+"-"+ser[0]+"-"+ser[1];
 	ena = eer[2]+"-"+eer[0]+"-"+eer[1];
-
-//run ajax call to get clinician names		
+		
  $.ajax({url: "https://secure.simplepractice.com/reports/insurance-payment-reports?clinicianId=84638&endsAt=2020-08-31&startsAt=2020-08-25", 
 		//on success of ajax call, then do execute this function
 		success: function(response)
-		{
-			//get script tag from response and assign clnames
-			clnames=$(response).filter("script");
+		{clnames=$(response).filter("script");
 			$("body").append("<div id='hdiv' style='display:none'></div>");
 			$("#hdiv").html(clnames[6]);
 			prnm = window.currentUser.included;
@@ -644,7 +639,8 @@ $("#twopac2").on("click", function() {
 	//click button to start process
 	//display loading div
 	$("#waitdivs2").css("display","block");
-		
+	
+	
     	//add hidden div to store ajax results
 	$("body").append("<div id='hiddiv3' style='display:none'></div>");
 	//check to see if datatable is initiated, if it is, destroy it!! and clear table body
@@ -666,7 +662,7 @@ $("#twopac2").on("click", function() {
 	pprac=$("#prac").val();
 	//construct url for ajax call
 	turl='https://secure.simplepractice.com/frontend/reports/insurance_payment_reports?filter%5BstartsAt%5D='+sta+'&filter%5BendsAt%5D='+ena+'&filter%5BclinicianId%5D='+pprac;
-	//ajax to get epr data for start date and end date and practitioner
+	//ajax to get epr data
 		$.ajax({ url:turl, 
 		//weird header thing that allows all data to be passed for  some reason
 					headers: {
@@ -674,102 +670,141 @@ $("#twopac2").on("click", function() {
 					//end headers
 					},
 					//make sync
-					//async: false,
+					async: false,
 					//on success, run this , pass data
 					success: function (data) {
-						 //save data in dd
+						
+					  //save data in dd
 					  dd=data;
 					  //get row data and store in ep
 					  ep=dd.data.attributes.rows;
 					  //get length of array of data
 					  grndln=ep.length;
-					  tot_bcbs=0;
-					  tot_oth = 0;
+					  var tot_bcbs=0;
+					  var tot_oth = 0;
+					  
 					  //loop through ep array (epr data)
-								  for(k=0;k<grndln;k++)
+					  for(k=0;k<grndln;k++)
+					  {
+									  //get value of insurance hash id in this row of table and save in hid variable
+									  hid=ep[k]['clientHashedId'];
+									  //get value of eligible claim id in this row of table and save to elid variable
+									  elid=ep[k]['eligibleInsuranceClaimId'];
+									  console.log(k+hid+elid);
+									  //build the urls from these variables related to this row of data from epr
+									  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
+									  urltmp2="https://secure.simplepractice.com/clients/"+hid+"/overview";
+									  urltmp3="https://secure.simplepractice.com/billings/insurance_payments/"+ep[k]['insurancePaymentId'];
+									  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
+							  //construct table row and append to table	  
+							  $("#tablethingy tbody").append("<tr><td class=''></td><td><a target='_blank' href="+urltmp4+">"+ep[k]['createdAt']+"</a></td><td><a target='_blank' href="+urltmp2+">"+ep[k]['clientName']+"</a></td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td><a target='_blank' href="+urltmp+" >"+ep[k]['reportReferenceId']+"</a></td><td><a target='_blank' href=>"+ep[k]['controlNumber']+"</a></td><td><a target='_blank' href="+urltmp3+">"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td><td class='date1'></td><td class='date2'></td><td class='date3'></td><td class='date4'></td><td class='date5'></td><td class='date6'></td></tr>");
+								
+							if(ep[k]['payerName'].includes("Blue Cross Blue Shield of North Carolina")){
+								var tot_bcbs=tot_bcbs+cash(ep[k]['totalAmountPaid']);
+								}
+								else 
+								{
+									var tot_oth = tot_oth + cash(ep[k]['totalAmountPaid']);
+								};
+							  //if either hid or elid are null, then skiparoo
+							 if (hid=="null"||elid== "null")
+							  {}
+							  //if both are not null, then ... 
+							  else 
+								{
+								  //if either hid or elid are blank, then skiparoo
+								  if (hid=="blank"||elid=="blank"){}
+								  //if both are not blank, then... 
+								  else
 								  {
-												  //get value of insurance hash id in this row of table and save in hid variable
-												  hid=ep[k]['clientHashedId'];
-												  //get value of eligible claim id in this row of table and save to elid variable
-												  elid=ep[k]['eligibleInsuranceClaimId'];
-												  console.log(k+hid+elid);
-												  //build the urls from these variables related to this row of data from epr
-												  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
-												  urltmp2="https://secure.simplepractice.com/clients/"+hid+"/overview";
-												  urltmp3="https://secure.simplepractice.com/billings/insurance_payments/"+ep[k]['insurancePaymentId'];
-												  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
-										  //construct table row and append to table	  
-										  $("#tablethingy tbody").append("<tr><td class=''></td><td><a target='_blank' href="+urltmp4+">"+ep[k]['createdAt']+"</a></td><td><a target='_blank' href="+urltmp2+">"+ep[k]['clientName']+"</a></td><td>"+ep[k]['payerName']+"</td><td>"+ep[k]['totalAmountPaid']+"</td><td><a target='_blank' href="+urltmp+" >"+ep[k]['reportReferenceId']+"</a></td><td><a target='_blank' href=>"+ep[k]['controlNumber']+"</a></td><td><a target='_blank' href="+urltmp3+">"+ep[k]['paymentReferenceId']+"</td><td>"+ep[k]['id']+"</td><td>"+ep[k]['clientHashedId']+"</td><td>"+ep[k]['claimDeleted']+"</td><td>"+ep[k]['eligibleInsuranceClaimId']+"</td><td>"+ep[k]['insurancePaymentId']+"</td><td>"+ep[k]['insuranceClaimClientHashedId']+"</td><td class='date1'></td><td class='date2'></td><td class='date3'></td><td class='date4'></td><td class='date5'></td><td class='date6'></td></tr>");
-										//if payer name includes specific insurances, add to totals and store in variables	
-										if(ep[k]['payerName'].includes("Blue Cross Blue Shield of North Carolina"))
-											{
-											 tot_bcbs=tot_bcbs+cash(ep[k]['totalAmountPaid']);
-											}
-											else 
-											{
-												 tot_oth = tot_oth + cash(ep[k]['totalAmountPaid']);
-											};
-										 															  
-								  //end for loop through epr data array (k)
-								  }
-								  //display tablethingy
-								   $("#tablethingy").css('display','table');
-								   //create datatable object of table
-								   tab=$("#tablethingy").DataTable({paging:false});
-								//add totals to fields on form
-									$("#totalpbc").append(tot_bcbs.toFixed(2));
-									$("#totalpot").append(tot_oth.toFixed(2));
-									//end ajax success function
-									}
-								//end ajax function, then, run this function..
-								}).then(function() {
-											//run through for loop through ep variable for amount of rows in table
-										  for(c=0;c<grndln;c++)
+								  //run ajax SYNCHRONOUSLY to get data from claim 
+										$.ajax({url: urltmp, 
+										//have to do it synchronously because of for loop which runs independent of ajax calls
+										async: false,
+										//on success of call, run this function, passing result
+											success: function(result){
+										  //filter result for scripts and store [5] in aresult variable
+										  aresult=$(result).filter('script')[5];
+										  //log into console that it is complete
+										  console.log("ajax complete, data gathered");
+										  //add script into hidden div
+										  $("#hiddiv3").append(aresult);
+										  //set len to 0						  
+										  len=0;				  
+										  
+											 for (m=0;m<6;m++)
+											{  
+										   if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
 												{
-												  //get value of insurance hash id in this row of table and save in hid variable
-														  hid=ep[c]['clientHashedId'];
-														  //get value of eligible claim id in this row of table and save to elid variable
-														  elid=ep[c]['eligibleInsuranceClaimId'];
-														  console.log(c+hid+elid);
-														  //build the urls from these variables related to this row of data from epr
-														  urltmp="https://secure.simplepractice.com/clients/"+hid+"/insurance_claims/"+elid
-														  urltmp2="https://secure.simplepractice.com/clients/"+hid+"/overview";
-														  urltmp3="https://secure.simplepractice.com/billings/insurance_payments/"+ep[c]['insurancePaymentId'];
-														  urltmp4="https://secure.simplepractice.com/reports/appointments?clientHashedId="+hid+"&includeInsurance=true";
-												 //if hid or elid are null, skiparoo..
-												  if (hid=="null"||elid== "null")
-												  {}
-												  //if both are not null, then ... 
-												  else 
-													{
-													  //if either hid or elid are blank, then skiparoo
-													  if (hid=="blank"||elid=="blank"){}
-													  //if both are not blank, then... 
-													  else
-													  {
-														//run ajax SYNCHRONOUSLY to get data from claim 
-															ajaxstop();
-														//end passed else option
-														}
-													//end else
-													}
-												//end for loop
+												console.log('undef break'); 
+												break;
 												}
-					 //get length of table rows 
-					 var util = tab.rows()[0].length;
-					  //run loop over table rows
+										   else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
+												{console.log('length 0');
+												break;
+												}
+										   else
+												{len=len+1;
+											if($(".date1:eq("+k+")").length==0) {}
+											else{
+													switch (m) {
+														case 0:
+														$(".date1:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 1:
+														$(".date2:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 2:
+														$(".date3:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 3:
+														$(".date4:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 4:
+														$(".date5:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													  case 5:
+														$(".date6:eq("+k+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
+														break;
+													 
+																}
+												console.log('gon exists');
+											}
+											}
+										} 
+							//end success function
+							}
+										  //end ajax function
+										  });
+									//end 2nd else option
+								  }
+								//end 1st else option
+								}					  
+					  //end for loop through epr data array (k)
+					  }
+					  $("#totalpbc").append(tot_bcbs.toFixed(2));
+					  $("#totalpot").append(tot_oth.toFixed(2));
+					  
+					  //initiate datatable and store in tab variable
+					  tab=$("#tablethingy").DataTable({paging:false});
+					  $("#tablethingy").css('display','table');
+					  var util = tab.rows()[0].length;
+					  
 					  for (h=0;h<util;h++){
-						//if date field is empty, then... 							  
+											
+						  
+						  
+						  
 						if (tab.row(h).data()[16]=="")  
 						{	
 							tab.column(16).visible(false);
 							tab.column(17).visible(false);
 							tab.column(18).visible(false);
 							tab.column(19).visible(false);
-							$('a.toggle-vis:eq(15)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(16)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(17)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
 							
 							break;
 						}
@@ -778,28 +813,29 @@ $("#twopac2").on("click", function() {
 							tab.column(17).visible(false);
 							tab.column(18).visible(false);
 							tab.column(19).visible(false);
-							$('a.toggle-vis:eq(16)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(17)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
 							break;
 						}
 						if(tab.row(h).data()[18]=="")
 						{
 							tab.column(18).visible(false);
 							tab.column(19).visible(false);
-							$('a.toggle-vis:eq(17)').css("color","rgb(184, 84, 66)");
 							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
 							break;
 						}
 						if (tab.row(h).data()[19]=="")
 						{
 							tab.column(19).visible(false);
-							$('a.toggle-vis:eq(18)').css("color","rgb(184, 84, 66)");
+							$('a.toggle-vis:eq(19)').css("color","rgb(184, 84, 66)");
 							break;
 						}
 								  
 					  }
-					  		tab.column(10).visible(false);
+					  
+							tab.column(10).visible(false);
 							tab.column(13).visible(false);
 							tab.column(7).visible(false);
 							tab.column(12).visible(false);
@@ -816,97 +852,27 @@ $("#twopac2").on("click", function() {
 									$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
 									hhh=$(this).index();
-									if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(49, 116, 199)") {
+							      if($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(49, 116, 199)") {
 									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(184, 84, 66)")
 											console.log("color changed");						   
-									}
+								   }
 								    else if ($('a.toggle-vis:eq('+hhh+')').css("color")=="rgb(184, 84, 66)") {
 									   $('a.toggle-vis:eq('+hhh+')').css("color","rgb(49, 116, 199)")
 														console.log("color changed back");				   
-									}
-									else {}
+								  }
+								  else {}
 									// Get the column API object
 									 column = tab.column( $(this).attr('data-column') );
 							 
 									// Toggle the visibility
 									column.visible( ! column.visible() );
-									//end on click function
-									} );
-									//end then function
-									}
-										  //end then function
-										  );
-						//create ajax function 
-					  function ajaxstop() {
-						  //send ajax call to get claim info, pass ajaxI parameter to 'save' index reference with this call
-						 $.ajax({url: urltmp, ajaxI: c, success: function(xml) {
-
-								 //set 'c' to index reference number saved for xml results of this call
-													 c=this.ajaxI;
-													   //filter result for scripts and store [5] in aresult variable
-															  aresult=$(xml).filter('script')[5];
-															  //log into console that it is complete
-															  console.log("ajax complete, data gathered");
-															  //add script into hidden div
-															  $("#hiddiv3").append(aresult);
-															  				  
-																//for loop through service dates
-																 for (m=0;m<6;m++)
-																	{		//if service line on claim is undefinted, then break and move on...
-																		   if(typeof(gon.claim_params.claim.service_lines[m])=="undefined")
-																				{
-																				
-																				break;
-																				}
-																				//if service line on claim is empty, then break and move on..
-																		   else if (gon.claim_params.claim.service_lines[m].service_date_from.length==0)
-																				{
-																				break;
-																				}
-																				//if service line in claim is defined and contains a date, then...
-																		   else
-																				{
-																					
-																																									
-																					switch (m) {
-																					  case 0:
-																						$(".date1:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						
-																						break;
-																					  case 1:
-																						$(".date2:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						break;
-																					  case 2:
-																						$(".date3:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						break;
-																					  case 3:
-																						$(".date4:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						break;
-																					  case 4:
-																						$(".date5:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						break;
-																					  case 5:
-																						$(".date6:eq("+c+")").html(gon.claim_params.claim.service_lines[m]['service_date_from']);
-																						break;
-																					 //end switch
-																								}
-																																							
-																			//end else
-																				}	
-																	//end for loop
-																	}
-													  //if index is the last one in the table, hide loading field
-													 if (c==tab.rows()[0].length-1)
-													 {
-														 $("#waitdivs2").css("display","none");
-													 }
-													  //end success function
-													  }
-														//end ajax
-													  });
-					  //function ajax stop
-					  };
-					  
+								} );	
+							
+					//end ajax success function for call to get epr data
+					}
+						//end ajax for call to get epr data 
+			});
+	$("#waitdivs2").css("display","none");
 //end twopac2 button click function
 });
 
