@@ -79,6 +79,7 @@ function addDays(date, days) {
 //on click of twopac button, get data and run function...
 $("#twopac").on("click", function () {
 	//add column hiding links
+	$("#waitdivs2").css("display","block");
 	$('#togdiv').css("display","block");
 			  //if data table exists, clear and destroy
 			  
@@ -94,17 +95,7 @@ $("#twopac").on("click", function () {
 						$("#ch_container").html("");
 						$("#ch_container2").html("");
 						$("#ch_container3").html("");}
-			 /*  if($.fn.DataTable.isDataTable('#tablethingy')){
-						tab.destroy();
-						$("#tablethingy").html("");
-						$("#tablethingy").append("<tbody></tbody>");
-						$("#sums").html("");
-						$("#clsums").html("");
-						$("#sign").html("");
-						$("#ch_container").html("");
-						$("#ch_container2").html("");
-						$("#ch_container3").html("");
-			  }; */
+			 
 	dr=$("input").val();
 	er=dr.split(" - ");
 	ser = er[0].split("/");
@@ -235,14 +226,19 @@ $("#twopac").on("click", function () {
 																									//pass this variable
 																									ajaxG:i,
 																									//have to do it synchronously because of for loop which runs independent of ajax calls
-																									  async: false,
+																									  //async: false,
 																									  //on success of call, run this function, passing result
 																									  success: function(data)
 																												{
 																														var ghgh=$(data).find(".claim-history").find('li').text().trim();
+																														
 																														var rr=this.ajaxG;
 																														//get this table row object and store as tre	
-																														var tre=tab.row(rr);
+																														tre=tab.row(rr);
+																														if(ghgh.includes("deductible"))
+																														{$(tre.node())[0].cells[13].innerHTML="DEDUCTIBLE";
+																															$(tre.node())[0].style.backgroundColor="#fccd68";
+																														}
 																														console.log(tre);
 																														//get row object and add child row 
 																														tab.row(tre).child( "<table><tr style='background-color:#e1f4f7'>"+
@@ -271,7 +267,9 @@ $("#twopac").on("click", function () {
 																				//end for loop through resulting data array	
 																				}
 																					 //end ajax success function
-																					}
+																		$("#waitdivs2").css("display","none");		
+
+																				}
 														 //end ajax call
 														 })
 													}			 
@@ -573,6 +571,7 @@ $("#twopac").on("click", function () {
 					  $("#sums").css("display", "block");
 
 						});
+					
 												
 						$('a.toggle-vis').on( 'click', function (e) {
 									e.preventDefault();
@@ -595,6 +594,10 @@ $("#twopac").on("click", function () {
 					//end done function	
 						});
 						
+	
+	//twopac function close  
+    }); 
+	
 	//function to hide sums div on click
     $("#threepac").click(function () {
 		//set display status of sums div to gump variable
@@ -725,7 +728,8 @@ $("#twopac").on("click", function () {
           }
              };
             });
-    $("#twelvepac").click(function () {
+   
+		 $("#twelvepac").click(function () {
         tllen=tab.rows()[0].length;
           for (i=0;i<tllen;i++) {
              if(roww(i)[13]=="UNPAID"||roww(i)[13]=="UNBILLED")
@@ -747,8 +751,6 @@ $("#twopac").on("click", function () {
 			 }
         };
       });
-	//twopac function close  
-    }); 
 //end if window report function...
 }
 //if window is report2 (for epr search thingy)...
