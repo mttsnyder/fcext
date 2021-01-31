@@ -4,6 +4,7 @@ $("table").css("font-size","13px");
 chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {a=tabs[0];
          //send message to first tab of litmus, on success run function and pass it response from tab
     chrome.tabs.sendMessage(a.id, {greeting: "litmus"}, function(response) {
+		console.log('litmus');
          //set response to loc variable
         loc=response;
          //log this variable to console of extension
@@ -118,6 +119,44 @@ chrome.tabs.query({url: "https://secure.simplepractice.com/*"}, function(tabs) {
                             repdat=response;
                             //return repdat varlue to wherever
                             return repdat;
+                        //end send message function
+                        });
+                    //end query function
+                    });
+                //end repbutt2 function
+                });
+		$("#prrepbutt").click(function () {
+                //send query to active and current window, pass tabs to function and run
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                      //set a to first tab
+                      a=tabs[0];
+                      //send message to this tab of report2, on response, pass this response to function and run...
+                        chrome.tabs.sendMessage(a.id, {greeting: "prreport"}, function(response) {
+                          //log successful send and recieve
+                              console.log("prreport message sent and response received");
+                              //set response equal to repdat
+                            repdat=response;
+                            //return repdat varlue to wherever
+                            return repdat;
+                        //end send message function
+                        });
+                    //end query function
+                    });
+                //end repbutt2 function
+                });
+		$("#striperep").click(function () {
+                //send query to active and current window, pass tabs to function and run
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                      //set a to first tab
+                      a=tabs[0];
+                      //send message to this tab of report2, on response, pass this response to function and run...
+                        chrome.tabs.sendMessage(a.id, {greeting: "striperep"}, function(response) {
+                          //log successful send and recieve
+                              console.log("striperep message sent and response received");
+                              //set response equal to repdat
+                            strrep=response;
+                            //return repdat varlue to wherever
+                            return strrep;
                         //end send message function
                         });
                     //end query function

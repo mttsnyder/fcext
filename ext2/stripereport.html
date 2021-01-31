@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FC Ins Report</title>
+    <script src="jquery.min.js"></script>
+			
+	<script type="text/javascript" src="moment.min.js"></script>
+	<script type="text/javascript" src="daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css">
+	<script type="text/javascript" src="dataTables.min.js"></script>
+	<link rel="stylesheet" type="text/css" src="dataTables.min.css">
+	<!-- <link href="bootstrap.min.css" rel="stylesheet" **media="screen"** type="text/css"> -->
+	<script src="mquery.js"></script>
+	<script src="highcharts.js"></script>
+	    
+	<style>
+        @font-face { font-family: "MetallophileSp8Light"; src: url('MetallophileSp8Light.ttf'); }
+        .container {
+            /*max-height: 600px;
+            min-height: 300px;
+            width: 250px;*/
+            /*border: 2px solid rgba(0,0,0,0.3);
+            border-radius: 2px;*/
+            background: white;
+
+        }
+        body {
+            font-family: "Metallophile Sp8 Light";
+            font-size: 100%;
+        }
+        th {
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        tr {
+            border-top: 1px solid darkgreen;
+            border-bottom: 1px solid darkgreen;
+            text-align: center;
+
+        }
+        td {
+            padding-left: 10px;
+            padding-right: 10px;
+			white-space: nowrap;
+        }
+        tr:nth-child(even) {background-color: #f2f2f2}
+        tr:hover {background-color: #f5f5f5}
+        .tab{
+            display:flex;
+            margin-left:2.5%;
+            width:95%;
+        }
+        img {/*float: right;*/
+            height: 60px;
+            width: 60px;
+        float:right}
+
+        #tablethingy {
+            flex:0 0 65%;
+			font-size: 21px !important;
+			width:95% !important;
+        }
+        .first {
+            float: left;
+            padding:1%;
+            font-size:20px;
+            width:30%;
+            margin-left:0%
+        }
+        .second {
+            float: left;
+            padding: 1%;
+            font-size:20px;
+            width:30%;
+            margin-left:0%
+        }
+        #cont {
+            padding: 1%;
+            width:95%;
+            margin-left:2.5%;
+        }
+        #sums {
+            width:325px;
+           /* float:left;
+            margin-right:30px;*/
+           /* border-top: solid;
+            border-top-color: darkslategrey;
+            border-top-width: 1px;*/
+        }
+        @media print {
+            button {
+                display:none;
+            }
+            .test {
+              background-color: #e8faec;
+            }
+        }
+        #sign, #clsums, #sums {
+           /* border-top: solid;
+            border-top-color: darkslategrey;
+            border-top-width: 1px;*/
+            /*width: 250px;
+            margin-left: 300px;
+            margin-top: 30px;
+            padding-left: 30px;
+            padding-top: 30px;
+            padding-bottom: 30px;*/
+        }
+        #cont {
+            margin-top: 1%;
+            border-top: 1px solid lightgrey;
+            margin-left: 0%;
+        }
+        #repcon {display: inline-block;
+        font-size:20px}
+        #notesdiv {
+            margin-left: 4.5%;
+            width: 87%;
+            font-size: 16px;
+            padding: 1%;
+            border: solid 0.5px;
+
+        }
+        .test {
+          background-color: #e8faec;
+        }
+		th.details-controlh {
+			background: url('icon2.jpg') no-repeat center center;
+			cursor: pointer;
+			background-size:contain;
+		}
+		th.details-controlha {
+			background: url('icon2.jpg') no-repeat center center;
+			cursor: pointer;
+			background-size:contain;
+		}
+		th.details-controlhb {
+			background: url('icon2.jpg') no-repeat center center;
+			cursor: pointer;
+			background-size:contain;
+		}
+		td.details-controla {
+			background: url('details_open.png') no-repeat center center;
+			cursor: pointer;
+		}
+		tr.shown td.details-controla {
+			background: url('details_close.png') no-repeat center center;
+		}
+		.toggle-vis{
+		color: #3174c7}
+		#tabsum2 {
+			font-size: 21px !important; }
+
+    </style>
+</head>
+<body>
+<div id="printthis" class="container">
+    <div class="page-header">
+        <h2 style='color:darkgreen'>Full Circle Stripe Report Thaang-a-lang</h2>
+        <h4 id="date"></h4>
+        <h4 id="name"></h4>
+        <img src="FC.jpg">
+		<label style='font-size:16px'>Date Range of Sessions:</label>
+				<input type="text" name="daterange" style='font-size:16px;width:200px;' size="22px"/></br></br>
+				<!-- <label style='font-size:16px;'>Clinician</label>
+				<select id='prac' style='font-size:16px;'></select></br></br> -->
+				<button id="stripepac" style="margin-left:10%; font-size:15px;">braang it yo</button>
+			
+		
+    </div>
+	<div id='pageheader2'>
+		<div id='waitdivs2' style='display:none;color:rgb(184, 84, 66)'><h1>Please Wait Loading...</h1></div>		
+	</div>
+
+    <div class="tab">
+        <table id="tablethingy">
+				<thead>
+				 
+					
+					<tr>
+					<th>Date</th>
+					<th>Client</th>
+					<th>Clinician</th>
+					<th>Net</th>
+					<th>Amount</th>
+					<th>Fee</th>
+					</tr>
+					
+				</thead>
+				
+				<tbody>
+				</tbody>
+		</table>
+    </div>
+
+	<div id="SummaryTotals0" style="font-size:24px;">Summary:
+	</div>
+    <div id="SummaryTotals" style="font-size:24px;">
+	</div>
+	<div id="SummaryTotals2" style="font-size:24px;">
+	</div>
+	
+	
+<div id="tabsum2div">
+	<table id='tabsum2' style='font-size:21px'>
+	<thead><tr><th>Practitioner</th><th>Total Amount Paid By Client</th><th>Total Fees to Stripe</th><th>Total Net to Practitioner</th></tr></thead>
+	<tbody></tbody>
+	</table>
+</div>
+</div>
+<div id="notesdiv" contenteditable="true">Notes:</div>
+
+        </br>
+        
+        <!-- <button id="threepac" style="margin-left:10%; font-size:15px;">Function?</button> -->
+        
+
+<script src="extension.js" type="text/javascript"></script>
+<script src="rocketfun.js" type="text/javascript"></script>
+
+</body>
+</html>
